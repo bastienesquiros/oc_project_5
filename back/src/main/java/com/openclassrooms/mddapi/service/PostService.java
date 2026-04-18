@@ -12,10 +12,12 @@ import com.openclassrooms.mddapi.repository.TopicRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Transactional(readOnly = true)
 public class PostService {
 
     private final PostRepository postRepository;
@@ -28,6 +30,7 @@ public class PostService {
                 .orElseThrow(() -> new ResourceNotFoundException("Post not found with id: " + id));
     }
 
+    @Transactional
     public PostResponseDto create(User author, PostRequestDto dto) {
         Topic topic = topicRepository.findById(dto.topicId())
                 .orElseThrow(() -> new ResourceNotFoundException("Topic not found with id: " + dto.topicId()));

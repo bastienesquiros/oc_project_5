@@ -12,16 +12,19 @@ import com.openclassrooms.mddapi.repository.TopicRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Transactional(readOnly = true)
 public class SubscriptionService {
 
     private final SubscriptionRepository subscriptionRepository;
     private final TopicRepository topicRepository;
     private final SubscriptionMapper subscriptionMapper;
 
+    @Transactional
     public SubscriptionResponseDto subscribe(User user, SubscriptionRequestDto dto) {
         if (subscriptionRepository.existsByUserIdAndTopicId(user.getId(), dto.topicId())) {
             log.warn("User {} already subscribed to topic {}", user.getId(), dto.topicId());
@@ -36,6 +39,7 @@ public class SubscriptionService {
         return subscriptionMapper.toDto(subscriptionRepository.save(subscription));
     }
 
+    @Transactional
     public void unsubscribe(User user, Long subscriptionId) {
         Subscription subscription = subscriptionRepository.findById(subscriptionId)
                 .orElseThrow(() -> new ResourceNotFoundException("Subscription not found with id: " + subscriptionId));

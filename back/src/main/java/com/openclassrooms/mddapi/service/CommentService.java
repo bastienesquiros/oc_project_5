@@ -14,10 +14,12 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
+@Transactional(readOnly = true)
 public class CommentService {
 
     private final CommentRepository commentRepository;
@@ -31,6 +33,7 @@ public class CommentService {
         return commentRepository.findByPostId(postId, pageable).map(commentMapper::toDto);
     }
 
+    @Transactional
     public CommentResponseDto create(User author, CommentRequestDto dto) {
         Post post = postRepository.findById(dto.postId())
                 .orElseThrow(() -> new ResourceNotFoundException("Post not found with id: " + dto.postId()));
