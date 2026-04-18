@@ -3,7 +3,7 @@
   @if (description()) {
     <p class="sub-description">{{ description() }}</p>
   }
-  <button class="unsub-btn" type="button" (click)="unsubscribe.emit()">
+  <button class="unsub-btn" type="button" (click)="unsubscribe.emit()" [attr.aria-label]="'Se désabonner de ' + title()">
     Se désabonner
   </button>
 </div>

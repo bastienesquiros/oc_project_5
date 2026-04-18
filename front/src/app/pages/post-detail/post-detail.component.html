@@ -3,7 +3,7 @@
 <div class="post-detail-page">
   @if (loading()) {
     <div class="loading-container">
-      <mat-progress-spinner diameter="48" mode="indeterminate" />
+      <mat-progress-spinner diameter="48" mode="indeterminate" aria-label="Chargement de l'article" />
     </div>
   } @else if (post(); as post) {
     <div class="post-header">
@@ -46,6 +46,7 @@
             placeholder="Ecrivez ici votre commentaire"
             rows="3"
             class="comment-textarea"
+            aria-label="Votre commentaire"
           ></textarea>
           <button
             mat-icon-button

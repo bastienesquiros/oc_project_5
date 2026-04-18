@@ -3,7 +3,7 @@
 <div class="feed-page">
   <div class="feed-header">
     <a [routerLink]="['/posts/create']" class="create-btn">Créer nouvel un article</a>
-    <button class="sort-btn" (click)="toggleSort()">
+    <button class="sort-btn" (click)="toggleSort()" [attr.aria-label]="'Trier par date ' + (sort() === 'desc' ? 'croissante' : 'décroissante')">
       Trier par
       <mat-icon>{{ sort() === 'desc' ? 'arrow_downward' : 'arrow_upward' }}</mat-icon>
     </button>
@@ -11,7 +11,7 @@
 
   @if (loading()) {
     <div class="loading-container">
-      <mat-spinner diameter="48" />
+      <mat-spinner diameter="48" aria-label="Chargement des articles" />
     </div>
   } @else if (posts().length === 0) {
     <div class="empty-state">
@@ -20,7 +20,7 @@
   } @else {
     <div class="posts-list">
       @for (post of posts(); track post.id) {
-        <div class="post-card" [routerLink]="['/posts', post.id]">
+        <div class="post-card" [routerLink]="['/posts', post.id]" role="article" [attr.aria-label]="post.title">
           <h3 class="post-title">{{ post.title }}</h3>
           <p class="post-meta">{{ post.created | date:'dd/MM/yyyy' }} - {{ post.authorUsername }}</p>
           <p class="post-preview">{{ post.content }}</p>

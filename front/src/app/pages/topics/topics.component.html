@@ -3,7 +3,7 @@
 <div class="topics-page">
   @if (loading()) {
     <div class="loading-container">
-      <mat-spinner diameter="48" />
+      <mat-spinner diameter="48" aria-label="Chargement des thèmes" />
     </div>
   } @else {
     <div class="topics-list">
@@ -12,11 +12,15 @@
           <h3 class="topic-title">{{ topic.title }}</h3>
           <p class="topic-description">{{ topic.description }}</p>
           @if (isSubscribed(topic.id)) {
-            <button class="subscribe-btn subscribe-btn--done" (click)="unsubscribe(topic.id)">
+            <button class="subscribe-btn subscribe-btn--done" (click)="unsubscribe(topic.id)"
+              [attr.aria-label]="'Se désabonner de ' + topic.title"
+              [disabled]="loadingTopics().has(topic.id)">
               Déjà abonné
             </button>
           } @else {
-            <button class="subscribe-btn" (click)="subscribe(topic.id)">
+            <button class="subscribe-btn" (click)="subscribe(topic.id)"
+              [attr.aria-label]="'S\'abonner à ' + topic.title"
+              [disabled]="loadingTopics().has(topic.id)">
               S'abonner
             </button>
           }

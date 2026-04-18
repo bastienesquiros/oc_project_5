@@ -5,30 +5,30 @@
 
   @if (loading()) {
     <div class="loading-container">
-      <mat-progress-spinner diameter="48" mode="indeterminate" />
+    <mat-progress-spinner diameter="48" mode="indeterminate" aria-label="Chargement du profil" />
     </div>
   } @else {
     <form [formGroup]="form" (ngSubmit)="save()" class="profile-form">
 
     <div class="input-field">
-      <input formControlName="username" placeholder="Nom d'utilisateur" type="text" />
+      <input formControlName="username" placeholder="Nom d'utilisateur" type="text" aria-label="Nom d'utilisateur" />
     </div>
 
     <div class="input-field">
-      <input formControlName="email" placeholder="Email" type="email" />
+      <input formControlName="email" placeholder="Email" type="email" aria-label="Adresse e-mail" />
     </div>
 
     <div class="input-field">
-      <input formControlName="password" placeholder="Mot de passe" type="password" />
+      <input formControlName="password" placeholder="Mot de passe" type="password" aria-label="Nouveau mot de passe" />
     </div>
 
       @if (successMessage()) {
-        <p class="success-msg">{{ successMessage() }}</p>
+        <p class="success-msg" role="status">{{ successMessage() }}</p>
       }
 
-      <button class="save-btn" type="submit" [disabled]="saving()">
+      <button class="save-btn" type="submit" [disabled]="saving()" [attr.aria-busy]="saving()">
         @if (saving()) {
-          <mat-progress-spinner diameter="20" mode="indeterminate" />
+          <mat-progress-spinner diameter="20" mode="indeterminate" aria-label="Sauvegarde en cours" />
         } @else {
           Sauvegarder
         }

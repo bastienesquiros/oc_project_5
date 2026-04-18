@@ -1,7 +1,7 @@
 <app-navbar [minimal]="true" />
 
 <div class="login-page">
-  <button mat-icon-button class="back-btn" (click)="goBack()">
+  <button mat-icon-button class="back-btn" (click)="goBack()" aria-label="Retour">
     <mat-icon>arrow_back</mat-icon>
   </button>
 
@@ -12,7 +12,7 @@
   <div class="login-form">
     <h2 class="title">Se connecter</h2>
 
-    <form [formGroup]="form" (ngSubmit)="submit()">
+    <form [formGroup]="form" (ngSubmit)="submit()" aria-label="Formulaire de connexion">
       <mat-form-field appearance="outline" class="full-width">
         <mat-label>E-mail ou nom d'utilisateur</mat-label>
         <input matInput formControlName="identifier" />
@@ -30,7 +30,7 @@
       </mat-form-field>
 
       @if (errorMessage()) {
-        <div class="error-message">{{ errorMessage() }}</div>
+        <div class="error-message" role="alert">{{ errorMessage() }}</div>
       }
 
       <div class="submit-wrapper">
