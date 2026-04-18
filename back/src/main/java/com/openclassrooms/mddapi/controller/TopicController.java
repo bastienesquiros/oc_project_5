@@ -10,9 +10,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 @RestController
 @RequestMapping("/topics")
 @RequiredArgsConstructor
+@Tag(name = "Topics", description = "Available topics to subscribe to")
 public class TopicController {
 
     private final TopicService topicService;
