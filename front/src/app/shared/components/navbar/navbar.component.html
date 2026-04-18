@@ -20,7 +20,7 @@
 </mat-toolbar>
 
 @if (!minimal()) {
-  <div class="side-overlay" [class.open]="menuOpen()" (click)="closeMenu()"></div>
+  <div class="side-overlay" [class.open]="menuOpen()" (click)="closeMenu()" (keydown.escape)="closeMenu()" role="button" tabindex="0" aria-label="Fermer le menu"></div>
   <nav class="side-panel" [class.open]="menuOpen()">
     <button mat-icon-button class="side-close" (click)="closeMenu()">
       <mat-icon>close</mat-icon>

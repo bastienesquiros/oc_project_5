@@ -1,5 +1,5 @@
 import { Component, DestroyRef, inject, signal } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -28,6 +28,7 @@ import { PostResponse, CommentResponse } from '../../core/models';
 })
 export class PostDetailComponent {
   private route = inject(ActivatedRoute);
+  private router = inject(Router);
   private location = inject(Location);
   private postService = inject(PostService);
   private commentService = inject(CommentService);
@@ -45,6 +46,10 @@ export class PostDetailComponent {
 
   constructor() {
     const id = Number(this.route.snapshot.params['id']);
+    if (isNaN(id)) {
+      this.router.navigate(['/feed']);
+      return;
+    }
     this.postService.getById(id)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({

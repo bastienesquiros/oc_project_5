@@ -26,6 +26,7 @@ export class TopicsComponent {
   topics = signal<TopicResponse[]>([]);
   user = signal<UserResponse | null>(null);
   loading = signal(true);
+  loadingTopics = signal<Set<number>>(new Set());
 
   constructor() {
     this.loadData();
@@ -58,17 +59,33 @@ export class TopicsComponent {
   }
 
   subscribe(topicId: number): void {
+    if (this.loadingTopics().has(topicId)) return;
+    this.loadingTopics.update(s => new Set(s).add(topicId));
     this.subscriptionService.subscribe({ topicId })
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(() => this.refreshUser());
+      .subscribe({
+        next: () => {
+          this.refreshUser();
+          this.loadingTopics.update(s => { const n = new Set(s); n.delete(topicId); return n; });
+        },
+        error: () => this.loadingTopics.update(s => { const n = new Set(s); n.delete(topicId); return n; }),
+      });
   }
 
   unsubscribe(topicId: number): void {
+    if (this.loadingTopics().has(topicId)) return;
     const subId = this.getSubscriptionId(topicId);
     if (subId === null) return;
+    this.loadingTopics.update(s => new Set(s).add(topicId));
     this.subscriptionService.unsubscribe(subId)
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(() => this.refreshUser());
+      .subscribe({
+        next: () => {
+          this.refreshUser();
+          this.loadingTopics.update(s => { const n = new Set(s); n.delete(topicId); return n; });
+        },
+        error: () => this.loadingTopics.update(s => { const n = new Set(s); n.delete(topicId); return n; }),
+      });
   }
 
   private refreshUser(): void {

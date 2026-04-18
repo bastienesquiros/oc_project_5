@@ -65,6 +65,8 @@ export class ProfileComponent {
   }
 
   save(): void {
+    if (!this.form.dirty) return;
+
     this.saving.set(true);
     this.successMessage.set(null);
     const { username, email, password } = this.form.value;
