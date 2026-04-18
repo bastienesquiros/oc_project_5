@@ -1,6 +1,6 @@
-import type { Config } from 'jest';
+import type { Config } from '@jest/types';
 
-const config: Config = {
+const config: Config.InitialOptions = {
   preset: 'jest-preset-angular',
   testEnvironment: 'jsdom',
   transform: {
