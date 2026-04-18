@@ -17,11 +17,14 @@
    - [Lancer en développement](#lancer-en-développement)
    - [Swagger / API Docs](#swagger--api-docs)
 5. [Frontend (Angular)](#frontend-angular)
-6. [Tests](#tests)
+6. [Aperçu de l'interface](#aperçu-de-linterface)
+7. [Tests](#tests)
+   - [Backend](#backend-1)
+   - [Frontend](#frontend-1)
    - [Rapport de couverture](#rapport-de-couverture)
-7. [Axes d'amélioration](#axes-damélioration)
-8. [FAQ](#faq)
-9. [IA & outils](#ia--outils)
+8. [Axes d'amélioration](#axes-damélioration)
+9. [FAQ](#faq)
+10. [IA & outils](#ia--outils)
 
 ---
 
@@ -44,7 +47,7 @@ Les utilisateurs peuvent s'inscrire, s'abonner à des thèmes techniques, publie
 ```
 root/
 ├── back/   → API REST Spring Boot 4
-└── front/  → SPA Angular 14
+└── front/  → SPA Angular 21
 ```
 
 Le backend expose une API REST sous le préfixe `/api`.  
@@ -158,9 +161,9 @@ Pour authentifier les requêtes dans Swagger : cliquer sur **Authorize** et sais
 
 | Outil       | Version minimale |
 |-------------|-----------------|
-| Node        | 16+             |
-| npm         | 8+              |
-| Angular CLI | 14+             |
+| Node        | 20+             |
+| npm         | 10+             |
+| Angular CLI | 21+             |
 
 ### Installation et démarrage
 
@@ -171,6 +174,14 @@ ng serve
 ```
 
 L'application est accessible sur `http://localhost:4200`.
+
+---
+
+## Aperçu de l'interface
+
+| | |
+|---|---|
+| ![UI 1](screenshots/ui_1.png) | ![UI 2](screenshots/ui_2.png) |
 
 ---
 
@@ -207,13 +218,39 @@ Générer le rapport :
 
 Résultats (mappers, DTOs et entités exclus — code généré / sans logique métier) :
 
-![Rapport de couverture](screenshots/coverage.png)
+![Rapport de couverture backend](screenshots/coverage_back.png)
 
 > **25 tests — 0 échec.**
 
 ### Frontend
 
-Le frontend utilise **Karma + Jasmine**. Aucun test spécifique n'est défini pour le MVP.
+Le frontend utilise **Jest** via `@angular-builders/jest` et `jest-preset-angular`.
+
+#### Tests unitaires (Jest)
+
+| Classe                    | Tests | Ce qui est testé                              |
+|---------------------------|-------|-----------------------------------------------|
+| `AppComponent`            | 1     | Initialisation du composant racine            |
+| `HomeComponent`           | 1     | Rendu de la page d'accueil                    |
+| `FeedComponent`           | 4     | Chargement des posts, tri asc/desc            |
+| `ProfileComponent`        | 4     | Chargement du profil, save(), unsubscribe()   |
+| `TopicsComponent`         | 5     | Chargement, isSubscribed(), subscribe(), unsubscribe() |
+| `AuthService`             | 6     | Login, register, logout, getToken()           |
+| `TopicService`            | 3     | getAll(), getById()                           |
+| `PostService`             | 3     | getById(), create(), getComments()            |
+
+#### Rapport de couverture
+
+Générer le rapport :
+```bash
+cd front
+npm run test:coverage
+# Rapport disponible dans : coverage/mdd/index.html
+```
+
+![Rapport de couverture frontend](screenshots/coverage_front.png)
+
+> **27 tests — 0 échec.**
 
 ---
 
@@ -226,10 +263,12 @@ Le frontend utilise **Karma + Jasmine**. Aucun test spécifique n'est défini po
 - **Notifications** : alertes lors d'un nouveau commentaire sur un article suivi
 - **Réactions** : likes/upvotes sur les articles
 - **Recherche** : recherche full-text sur les articles et les thèmes
-- **Pagination côté client** : curseur plutôt qu'offset pour de meilleures performances sur de grands volumes
+- **Pagination côté frontend** : affichage paginé des articles (curseur plutôt qu'offset) — actuellement tout est chargé en une requête
+- **Changement de mot de passe** : devrait invalider la session courante (logout automatique) ou renouveler le JWT pour éviter un état incohérent
 
 ### Techniques
 
+- **NgRx Store** : mettre en cache l'utilisateur courant dans un store global pour éviter un appel `/me` à chaque navigation (ProfileComponent, TopicsComponent chargent chacun indépendamment l'utilisateur)
 - **Testcontainers** : remplacer H2 par une vraie base MySQL en tests d'intégration (actuellement bloqué par une incompatibilité docker-java / Docker 29.x — [issue connue](https://github.com/testcontainers/testcontainers-java/issues))
 - **CVE et dépendances** : audit régulier avec `./mvnw dependency-check:check` (OWASP) ou Dependabot
 - **Refresh token** : implémenter la rotation des JWT (access token court + refresh token longue durée)
@@ -237,6 +276,7 @@ Le frontend utilise **Karma + Jasmine**. Aucun test spécifique n'est défini po
 - **Cache** : mise en cache des listes de thèmes (Caffeine ou Redis) — données rarement modifiées
 - **Observabilité** : Spring Boot Actuator + Micrometer + Prometheus/Grafana pour le monitoring
 - **CI/CD** : pipeline GitHub Actions (build, tests, rapport de couverture, scan sécurité)
+- **UX/UI** : amélioration du responsive mobile, skeleton loaders, toasts de confirmation
 
 ---
 
@@ -270,6 +310,7 @@ Ce projet a utilisé l'IA pour les tâches suivantes :
 - **Boilerplate** : squelettes de classes (mappers MapStruct, DTOs, configuration Spring Security)
 - **Tests unitaires** : génération des cas de test Mockito (`AuthServiceTest`, `SubscriptionServiceTest`, `PostServiceTest`) et des tests d'intégration MockMvc
 - **Débogage** : diagnostic des incompatibilités Spring Boot 4 (`@AutoConfigureMockMvc` supprimé, `TestRestTemplate` supprimé) et de la migration Testcontainers → H2
+- **Regex** : génération de l'expression régulière de validation du mot de passe (`PASSWORD_PATTERN` dans `register.component.ts`) — validée et intégrée manuellement
 
 > Tout le code généré a été relu, adapté et validé manuellement.
 
