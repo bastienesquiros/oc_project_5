@@ -1,0 +1,43 @@
+<app-navbar [minimal]="true" />
+
+<div class="login-page">
+  <button mat-icon-button class="back-btn" (click)="goBack()">
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+
+  <a routerLink="/" class="mobile-logo">
+    <img src="assets/logo_p6.png" alt="MDD Logo" />
+  </a>
+
+  <div class="login-form">
+    <h2 class="title">Se connecter</h2>
+
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Email ou nom d'utilisateur</mat-label>
+        <input matInput formControlName="identifier" />
+        @if (form.controls.identifier.hasError('required') && form.controls.identifier.touched) {
+          <mat-error>Ce champ est requis</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Mot de passe</mat-label>
+        <input matInput type="password" formControlName="password" />
+        @if (form.controls.password.hasError('required') && form.controls.password.touched) {
+          <mat-error>Ce champ est requis</mat-error>
+        }
+      </mat-form-field>
+
+      @if (errorMessage()) {
+        <div class="error-message">{{ errorMessage() }}</div>
+      }
+
+      <div class="submit-wrapper">
+        <button type="submit" class="submit-btn" [disabled]="loading()">
+          Se connecter
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

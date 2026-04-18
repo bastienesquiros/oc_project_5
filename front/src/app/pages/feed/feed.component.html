@@ -1,0 +1,50 @@
+<app-navbar />
+
+<div class="feed-page">
+  <div class="feed-header">
+    <h1>Articles</h1>
+    <div class="header-actions">
+      <mat-button-toggle-group [value]="sort()" (change)="onSortChange($event.value)">
+        <mat-button-toggle value="desc">Plus récent</mat-button-toggle>
+        <mat-button-toggle value="asc">Plus ancien</mat-button-toggle>
+      </mat-button-toggle-group>
+      <a mat-raised-button color="primary" [routerLink]="['/posts/create']">Nouvel article</a>
+    </div>
+  </div>
+
+  @if (loading()) {
+    <div class="loading-container">
+      <mat-spinner diameter="48" />
+    </div>
+  } @else if (posts().length === 0) {
+    <div class="empty-state">
+      <p>Abonnez-vous à des thèmes pour voir des articles</p>
+      <a mat-stroked-button [routerLink]="['/topics']">Découvrir les thèmes</a>
+    </div>
+  } @else {
+    <div class="posts-grid">
+      @for (post of posts(); track post.id) {
+        <mat-card class="post-card" [routerLink]="['/posts', post.id]">
+          <mat-card-header>
+            <mat-chip-set>
+              <mat-chip>{{ post.topicTitle }}</mat-chip>
+            </mat-chip-set>
+          </mat-card-header>
+          <mat-card-content>
+            <h3 class="post-title">{{ post.title }}</h3>
+            <p class="post-meta">{{ post.authorUsername }} · {{ post.created | date:'dd/MM/yyyy' }}</p>
+            <p class="post-preview">{{ post.content }}</p>
+          </mat-card-content>
+        </mat-card>
+      }
+    </div>
+
+    <mat-paginator
+      [length]="totalElements()"
+      [pageSize]="pageSize()"
+      [pageIndex]="currentPage()"
+      [pageSizeOptions]="[5, 10, 20]"
+      (page)="onPageChange($event)"
+    />
+  }
+</div>

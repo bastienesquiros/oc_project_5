@@ -1,0 +1,27 @@
+<mat-toolbar class="navbar" [class.minimal-mode]="minimal()">
+  <a [routerLink]="minimal() ? ['/'] : ['/feed']" class="logo-link">
+    <img src="assets/logo_p6.png" alt="MDD Logo" class="navbar-logo" />
+  </a>
+
+  @if (!minimal()) {
+    <!-- Desktop nav -->
+    <nav class="desktop-nav">
+      <a mat-button [routerLink]="['/feed']" routerLinkActive="active-link">Articles</a>
+      <a mat-button [routerLink]="['/topics']" routerLinkActive="active-link">Thèmes</a>
+      <a mat-button [routerLink]="['/profile']" routerLinkActive="active-link">Profil</a>
+    </nav>
+
+    <!-- Mobile hamburger -->
+    <button mat-icon-button class="hamburger" (click)="toggleMenu()" aria-label="Menu">
+      <mat-icon>{{ menuOpen() ? 'close' : 'menu' }}</mat-icon>
+    </button>
+  }
+</mat-toolbar>
+
+@if (!minimal() && menuOpen()) {
+  <nav class="mobile-nav">
+    <a mat-button [routerLink]="['/feed']" routerLinkActive="active-link" (click)="closeMenu()">Articles</a>
+    <a mat-button [routerLink]="['/topics']" routerLinkActive="active-link" (click)="closeMenu()">Thèmes</a>
+    <a mat-button [routerLink]="['/profile']" routerLinkActive="active-link" (click)="closeMenu()">Profil</a>
+  </nav>
+}

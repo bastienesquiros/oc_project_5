@@ -1,0 +1,51 @@
+<app-navbar />
+
+<div class="post-detail-page">
+  @if (loading()) {
+    <div class="loading-container">
+      <mat-spinner diameter="48" />
+    </div>
+  } @else if (post(); as post) {
+    <article class="post-article">
+      <mat-chip-set>
+        <mat-chip>{{ post.topicTitle }}</mat-chip>
+      </mat-chip-set>
+
+      <h1>{{ post.title }}</h1>
+      <p class="post-meta">{{ post.authorUsername }} · {{ post.created | date:'dd/MM/yyyy' }}</p>
+      <mat-divider />
+      <div class="post-content">{{ post.content }}</div>
+    </article>
+
+    <section class="comments-section">
+      <h2>Commentaires</h2>
+
+      @if (comments().length === 0) {
+        <p class="no-comments">Aucun commentaire pour l'instant.</p>
+      } @else {
+        <div class="comments-list">
+          @for (comment of comments(); track comment.id) {
+            <div class="comment">
+              <p class="comment-meta">{{ comment.authorUsername }} · {{ comment.created | date:'dd/MM/yyyy' }}</p>
+              <p class="comment-content">{{ comment.content }}</p>
+              <mat-divider />
+            </div>
+          }
+        </div>
+      }
+
+      <form [formGroup]="commentForm" (ngSubmit)="submitComment()" class="comment-form">
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Ajouter un commentaire</mat-label>
+          <textarea matInput formControlName="content" rows="3"></textarea>
+          @if (commentForm.controls.content.hasError('required') && commentForm.controls.content.touched) {
+            <mat-error>Le commentaire ne peut pas être vide</mat-error>
+          }
+        </mat-form-field>
+        <button mat-raised-button color="primary" type="submit" [disabled]="submittingComment()">
+          Commenter
+        </button>
+      </form>
+    </section>
+  }
+</div>

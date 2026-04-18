@@ -1,0 +1,58 @@
+<app-navbar [minimal]="true" />
+
+<div class="register-page">
+  <button mat-icon-button class="back-btn" (click)="goBack()">
+    <mat-icon>arrow_back</mat-icon>
+  </button>
+
+  <a routerLink="/" class="mobile-logo">
+    <img src="assets/logo_p6.png" alt="MDD Logo" />
+  </a>
+
+  <div class="register-form">
+    <h2 class="title">S'inscrire</h2>
+
+    <form [formGroup]="form" (ngSubmit)="submit()">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Nom d'utilisateur</mat-label>
+        <input matInput formControlName="username" />
+        @if (form.controls.username.hasError('required') && form.controls.username.touched) {
+          <mat-error>Ce champ est requis</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Email</mat-label>
+        <input matInput type="email" formControlName="email" />
+        @if (form.controls.email.hasError('required') && form.controls.email.touched) {
+          <mat-error>Ce champ est requis</mat-error>
+        }
+        @if (form.controls.email.hasError('email') && form.controls.email.touched) {
+          <mat-error>Email invalide</mat-error>
+        }
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Mot de passe</mat-label>
+        <input matInput type="password" formControlName="password" />
+        <mat-hint>Min. 8 caractères, 1 majuscule, 1 minuscule, 1 chiffre, 1 caractère spécial</mat-hint>
+        @if (form.controls.password.hasError('required') && form.controls.password.touched) {
+          <mat-error>Ce champ est requis</mat-error>
+        }
+        @if (form.controls.password.hasError('pattern') && form.controls.password.touched) {
+          <mat-error>Min. 8 caractères, 1 majuscule, 1 minuscule, 1 chiffre, 1 caractère spécial</mat-error>
+        }
+      </mat-form-field>
+
+      @if (errorMessage()) {
+        <div class="error-message">{{ errorMessage() }}</div>
+      }
+
+      <div class="submit-wrapper">
+        <button type="submit" class="submit-btn" [disabled]="loading()">
+          S'inscrire
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

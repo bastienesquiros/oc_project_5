@@ -1,0 +1,78 @@
+  .navbar {
+    height: 94px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 24px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    border-bottom: 1px solid #000000;
+
+    .navbar-logo {
+      width: 140px;
+      height: 81px;
+      object-fit: contain;
+    }
+
+    .logo-link {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+    }
+
+    .desktop-nav {
+      display: flex;
+      gap: 8px;
+
+      .active-link {
+        font-weight: 700;
+        border-bottom: 2px solid #000000;
+      }
+    }
+
+    .hamburger {
+      display: none;
+      color: #000000;
+    }
+  }
+
+  .mobile-nav {
+    display: none;
+    flex-direction: column;
+    background-color: #ffffff;
+    border-bottom: 1px solid #000000;
+    padding: 8px 0;
+
+    a {
+      width: 100%;
+      text-align: left;
+      padding: 8px 24px;
+      color: #000000;
+    }
+
+    .active-link {
+      font-weight: 700;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .navbar .desktop-nav {
+      display: none;
+    }
+
+    .navbar .hamburger {
+      display: flex;
+    }
+
+    .mobile-nav {
+      display: flex;
+    }
+
+    // En mode minimal (auth pages), cacher la navbar entière sur mobile
+    .navbar.minimal-mode {
+      display: none;
+    }
+  }
