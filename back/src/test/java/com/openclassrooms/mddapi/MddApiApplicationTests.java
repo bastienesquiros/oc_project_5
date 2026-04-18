@@ -1,13 +1,11 @@
 package com.openclassrooms.mddapi;
 
+import com.openclassrooms.mddapi.integration.AbstractIntegrationTest;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
 
-@SpringBootTest
-class MddApiApplicationTests {
+class MddApiApplicationTests extends AbstractIntegrationTest {
 
-	@Test
-	void contextLoads() {
-	}
-
+    @Test
+    void contextLoads() {
+    }
 }

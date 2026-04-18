@@ -30,7 +30,7 @@ public class FeedController {
     @Operation(summary = "Get paginated feed sorted by date")
     public ResponseEntity<Page<PostResponseDto>> getFeed(
             @AuthenticationPrincipal User user,
-            @PageableDefault(size = 20, sort = "createdAt", direction = DESC) Pageable pageable) {
+            @PageableDefault(size = 20, sort = "created", direction = DESC) Pageable pageable) {
         return ResponseEntity.ok(feedService.getFeed(user, pageable));
     }
 }

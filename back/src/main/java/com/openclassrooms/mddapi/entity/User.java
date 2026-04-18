@@ -29,7 +29,7 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
-@Table(indexes = {@Index(name = "idx_email", columnList = "email")})
+@Table(name = "users", indexes = {@Index(name = "idx_email", columnList = "email")})
 @EntityListeners(AuditingEntityListener.class)
 public class User implements UserDetails {
     @Id

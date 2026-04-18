@@ -41,7 +41,7 @@ public class PostController {
     @GetMapping("/{postId}/comments")
     public ResponseEntity<Page<CommentResponseDto>> getComments(
             @PathVariable Long postId,
-            @PageableDefault(size = 20, sort = "createdAt") Pageable pageable) {
+            @PageableDefault(size = 20, sort = "created") Pageable pageable) {
         return ResponseEntity.ok(commentService.findByPostId(postId, pageable));
     }
 }
