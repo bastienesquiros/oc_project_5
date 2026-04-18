@@ -3,19 +3,25 @@
 <div class="post-detail-page">
   @if (loading()) {
     <div class="loading-container">
-      <mat-spinner diameter="48" />
+      <mat-progress-spinner diameter="48" mode="indeterminate" />
     </div>
   } @else if (post(); as post) {
-    <article class="post-article">
-      <mat-chip-set>
-        <mat-chip>{{ post.topicTitle }}</mat-chip>
-      </mat-chip-set>
-
+    <div class="post-header">
+      <button mat-icon-button class="back-btn" (click)="goBack()" aria-label="Retour">
+        <mat-icon>arrow_back</mat-icon>
+      </button>
       <h1>{{ post.title }}</h1>
-      <p class="post-meta">{{ post.authorUsername }} · {{ post.created | date:'dd/MM/yyyy' }}</p>
-      <mat-divider />
+    </div>
+
+    <article class="post-article">
+      <p class="post-meta">
+        {{ post.created | date:'dd/MM/yyyy' }} · {{ post.authorUsername }} · {{ post.topicTitle }}
+      </p>
+
       <div class="post-content">{{ post.content }}</div>
     </article>
+
+    <hr class="section-divider" />
 
     <section class="comments-section">
       <h2>Commentaires</h2>
@@ -26,25 +32,31 @@
         <div class="comments-list">
           @for (comment of comments(); track comment.id) {
             <div class="comment">
-              <p class="comment-meta">{{ comment.authorUsername }} · {{ comment.created | date:'dd/MM/yyyy' }}</p>
-              <p class="comment-content">{{ comment.content }}</p>
-              <mat-divider />
+              <p class="comment-author">{{ comment.authorUsername }}</p>
+              <div class="comment-bubble">{{ comment.content }}</div>
             </div>
           }
         </div>
       }
 
       <form [formGroup]="commentForm" (ngSubmit)="submitComment()" class="comment-form">
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Ajouter un commentaire</mat-label>
-          <textarea matInput formControlName="content" rows="3"></textarea>
-          @if (commentForm.controls.content.hasError('required') && commentForm.controls.content.touched) {
-            <mat-error>Le commentaire ne peut pas être vide</mat-error>
-          }
-        </mat-form-field>
-        <button mat-raised-button color="primary" type="submit" [disabled]="submittingComment()">
-          Commenter
-        </button>
+        <div class="comment-input-row">
+          <textarea
+            formControlName="content"
+            placeholder="Ecrivez ici votre commentaire"
+            rows="3"
+            class="comment-textarea"
+          ></textarea>
+          <button
+            mat-icon-button
+            type="submit"
+            class="send-btn"
+            [disabled]="commentForm.invalid || submittingComment()"
+            aria-label="Envoyer"
+          >
+            <mat-icon>send</mat-icon>
+          </button>
+        </div>
       </form>
     </section>
   }

@@ -4,24 +4,34 @@
   </a>
 
   @if (!minimal()) {
-    <!-- Desktop nav -->
     <nav class="desktop-nav">
-      <a mat-button [routerLink]="['/feed']" routerLinkActive="active-link">Articles</a>
-      <a mat-button [routerLink]="['/topics']" routerLinkActive="active-link">Thèmes</a>
-      <a mat-button [routerLink]="['/profile']" routerLinkActive="active-link">Profil</a>
+      <button class="logout-btn" (click)="logout()">Se déconnecter</button>
+      <a [routerLink]="['/feed']" routerLinkActive="active-link" class="nav-link">Articles</a>
+      <a [routerLink]="['/topics']" routerLinkActive="active-link" class="nav-link">Thèmes</a>
+      <a [routerLink]="['/profile']" routerLinkActive="avatar--active" class="avatar-link" aria-label="Profil">
+        <div class="avatar"><mat-icon>person</mat-icon></div>
+      </a>
     </nav>
 
-    <!-- Mobile hamburger -->
     <button mat-icon-button class="hamburger" (click)="toggleMenu()" aria-label="Menu">
-      <mat-icon>{{ menuOpen() ? 'close' : 'menu' }}</mat-icon>
+      <mat-icon>menu</mat-icon>
     </button>
   }
 </mat-toolbar>
 
-@if (!minimal() && menuOpen()) {
-  <nav class="mobile-nav">
-    <a mat-button [routerLink]="['/feed']" routerLinkActive="active-link" (click)="closeMenu()">Articles</a>
-    <a mat-button [routerLink]="['/topics']" routerLinkActive="active-link" (click)="closeMenu()">Thèmes</a>
-    <a mat-button [routerLink]="['/profile']" routerLinkActive="active-link" (click)="closeMenu()">Profil</a>
+@if (!minimal()) {
+  <div class="side-overlay" [class.open]="menuOpen()" (click)="closeMenu()"></div>
+  <nav class="side-panel" [class.open]="menuOpen()">
+    <button mat-icon-button class="side-close" (click)="closeMenu()">
+      <mat-icon>close</mat-icon>
+    </button>
+    <button class="side-item side-item--logout" (click)="logout(); closeMenu()">Se déconnecter</button>
+    <a [routerLink]="['/feed']" routerLinkActive="active-link" class="side-item" (click)="closeMenu()">Articles</a>
+    <a [routerLink]="['/topics']" routerLinkActive="active-link" class="side-item" (click)="closeMenu()">Thèmes</a>
+    <div class="side-avatar-wrapper">
+      <a [routerLink]="['/profile']" routerLinkActive="avatar--active" class="avatar-link" (click)="closeMenu()">
+        <div class="avatar"><mat-icon>person</mat-icon></div>
+      </a>
+    </div>
   </nav>
 }

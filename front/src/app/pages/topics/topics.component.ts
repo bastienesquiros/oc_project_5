@@ -1,7 +1,5 @@
-import { Component, DestroyRef, inject, signal, computed } from '@angular/core';
+import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { MatCardModule } from '@angular/material/card';
-import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { NavbarComponent } from '../../shared/components/navbar/navbar.component';
 import { TopicService } from '../../core/services/topic.service';
@@ -13,8 +11,6 @@ import { TopicResponse, UserResponse } from '../../core/models';
   selector: 'app-topics',
   standalone: true,
   imports: [
-    MatCardModule,
-    MatButtonModule,
     MatProgressSpinnerModule,
     NavbarComponent,
   ],

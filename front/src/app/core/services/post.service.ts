@@ -1,5 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
+import { map } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 import { CommentResponse, CreatePostRequest, Page, PostResponse } from '../models';
 
@@ -17,6 +18,7 @@ export class PostService {
   }
 
   getComments(postId: number) {
-    return this.http.get<CommentResponse[]>(`${this.baseUrl}/${postId}/comments`);
+    return this.http.get<Page<CommentResponse>>(`${this.baseUrl}/${postId}/comments`)
+      .pipe(map(page => page.content));
   }
 }

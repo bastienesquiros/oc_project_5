@@ -1,0 +1,9 @@
+<div class="sub-card">
+  <h3 class="sub-title">{{ title() }}</h3>
+  @if (description()) {
+    <p class="sub-description">{{ description() }}</p>
+  }
+  <button class="unsub-btn" type="button" (click)="unsubscribe.emit()">
+    Se désabonner
+  </button>
+</div>

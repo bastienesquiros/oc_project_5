@@ -104,16 +104,29 @@ mysql -u root -p -e "CREATE DATABASE mddapi_db CHARACTER SET utf8mb4 COLLATE utf
 
 ### Configuration
 
-Le backend utilise des profils Spring :
+Le backend utilise des profils Spring. Le fichier `application-dev.properties` est **ignoré par git** — il doit être créé localement.
 
-| Profil  | Fichier                        | Usage                              |
-|---------|--------------------------------|------------------------------------|
-| (défaut)| `application.properties`       | Paramètres communs                 |
-| `dev`   | `application-dev.properties`   | MySQL local, SQL logs, Swagger ON  |
-| `prod`  | `application-prod.properties`  | Swagger OFF                        |
-| `test`  | `application-test.properties`  | H2, Flyway OFF, create-drop        |
+Variables minimales à définir dans `src/main/resources/application-dev.properties` :
 
-Le profil `dev` est préconfiguré avec une datasource MySQL locale et un secret JWT de développement. Adaptez `application-dev.properties` à votre environnement si nécessaire.
+```properties
+# Datasource
+spring.datasource.url=jdbc:mysql://localhost:3306/<votre_db>
+spring.datasource.username=<user>
+spring.datasource.password=<password>
+
+# JWT
+app.jwt.secret=<base64_secret>
+app.jwt.expiration=86400000
+
+# CORS
+app.cors.allowed-origins=http://localhost:4200
+
+# Swagger (dev uniquement)
+springdoc.api-docs.enabled=true
+springdoc.swagger-ui.enabled=true
+```
+
+> Pour générer un secret JWT valide : `openssl rand -base64 32`
 
 ### Lancer en développement
 

@@ -14,7 +14,7 @@
 
     <form [formGroup]="form" (ngSubmit)="submit()">
       <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Email ou nom d'utilisateur</mat-label>
+        <mat-label>E-mail ou nom d'utilisateur</mat-label>
         <input matInput formControlName="identifier" />
         @if (form.controls.identifier.hasError('required') && form.controls.identifier.touched) {
           <mat-error>Ce champ est requis</mat-error>

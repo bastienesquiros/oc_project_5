@@ -8,48 +8,43 @@
     <h1>Créer un article</h1>
   </div>
 
-  <mat-card class="form-card">
-    <mat-card-content>
-      <form [formGroup]="form" (ngSubmit)="submit()">
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Thème</mat-label>
-          <mat-select formControlName="topicId">
-            @for (topic of topics(); track topic.id) {
-              <mat-option [value]="topic.id">{{ topic.title }}</mat-option>
-            }
-          </mat-select>
-          @if (form.controls.topicId.hasError('required') && form.controls.topicId.touched) {
-            <mat-error>Veuillez sélectionner un thème</mat-error>
-          }
-        </mat-form-field>
+  <form [formGroup]="form" (ngSubmit)="submit()" class="post-form">
 
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Titre</mat-label>
-          <input matInput formControlName="title" maxlength="50" />
-          @if (form.controls.title.hasError('required') && form.controls.title.touched) {
-            <mat-error>Le titre est requis</mat-error>
-          }
-          @if (form.controls.title.hasError('maxlength')) {
-            <mat-error>Le titre ne peut pas dépasser 50 caractères</mat-error>
-          }
-        </mat-form-field>
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-select formControlName="topicId" placeholder="Sélectionner un thème">
+        @for (topic of topics(); track topic.id) {
+          <mat-option [value]="topic.id">{{ topic.title }}</mat-option>
+        }
+      </mat-select>
+      @if (form.controls.topicId.hasError('required') && form.controls.topicId.touched) {
+        <mat-error>Veuillez sélectionner un thème</mat-error>
+      }
+    </mat-form-field>
 
-        <mat-form-field appearance="outline" class="full-width">
-          <mat-label>Contenu</mat-label>
-          <textarea matInput formControlName="content" rows="10"></textarea>
-          @if (form.controls.content.hasError('required') && form.controls.content.touched) {
-            <mat-error>Le contenu est requis</mat-error>
-          }
-        </mat-form-field>
+    <mat-form-field appearance="outline" class="full-width">
+      <input matInput formControlName="title" placeholder="Titre de l'article" maxlength="50" />
+      @if (form.controls.title.hasError('required') && form.controls.title.touched) {
+        <mat-error>Le titre est requis</mat-error>
+      }
+      @if (form.controls.title.hasError('maxlength')) {
+        <mat-error>Le titre ne peut pas dépasser 50 caractères</mat-error>
+      }
+    </mat-form-field>
 
-        <button mat-raised-button color="primary" type="submit" [disabled]="loading()">
-          @if (loading()) {
-            <mat-spinner diameter="20" />
-          } @else {
-            Publier
-          }
-        </button>
-      </form>
-    </mat-card-content>
-  </mat-card>
+    <mat-form-field appearance="outline" class="full-width">
+      <textarea matInput formControlName="content" placeholder="Contenu de l'article" rows="12"></textarea>
+      @if (form.controls.content.hasError('required') && form.controls.content.touched) {
+        <mat-error>Le contenu est requis</mat-error>
+      }
+    </mat-form-field>
+
+    <button class="submit-btn" type="submit" [disabled]="loading()">
+      @if (loading()) {
+        <mat-progress-spinner diameter="20" mode="indeterminate" />
+      } @else {
+        Créer
+      }
+    </button>
+
+  </form>
 </div>

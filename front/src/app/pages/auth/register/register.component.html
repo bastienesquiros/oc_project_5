@@ -10,7 +10,7 @@
   </a>
 
   <div class="register-form">
-    <h2 class="title">S'inscrire</h2>
+    <h2 class="title">Inscription</h2>
 
     <form [formGroup]="form" (ngSubmit)="submit()">
       <mat-form-field appearance="outline" class="full-width">
@@ -22,7 +22,7 @@
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Email</mat-label>
+        <mat-label>Adresse e-mail</mat-label>
         <input matInput type="email" formControlName="email" />
         @if (form.controls.email.hasError('required') && form.controls.email.touched) {
           <mat-error>Ce champ est requis</mat-error>

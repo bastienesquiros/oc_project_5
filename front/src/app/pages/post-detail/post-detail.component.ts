@@ -1,15 +1,12 @@
 import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
+import { Location } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DatePipe } from '@angular/common';
-import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatChipsModule } from '@angular/material/chips';
+import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatDividerModule } from '@angular/material/divider';
 import { NavbarComponent } from '../../shared/components/navbar/navbar.component';
 import { PostService } from '../../core/services/post.service';
 import { CommentService } from '../../core/services/comment.service';
@@ -21,13 +18,9 @@ import { PostResponse, CommentResponse } from '../../core/models';
   imports: [
     ReactiveFormsModule,
     DatePipe,
-    MatCardModule,
     MatButtonModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatChipsModule,
+    MatIconModule,
     MatProgressSpinnerModule,
-    MatDividerModule,
     NavbarComponent,
   ],
   templateUrl: './post-detail.component.html',
@@ -35,6 +28,7 @@ import { PostResponse, CommentResponse } from '../../core/models';
 })
 export class PostDetailComponent {
   private route = inject(ActivatedRoute);
+  private location = inject(Location);
   private postService = inject(PostService);
   private commentService = inject(CommentService);
   private fb = inject(FormBuilder);
@@ -64,6 +58,10 @@ export class PostDetailComponent {
     this.postService.getComments(id)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(comments => this.comments.set(comments));
+  }
+
+  goBack(): void {
+    this.location.back();
   }
 
   submitComment(): void {

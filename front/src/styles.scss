@@ -6,6 +6,12 @@ body {
   color: #000000;
 }
 
+// Reset font héritage pour tous les éléments natifs
+button, input, select, textarea {
+  font-family: inherit;
+  font-size: inherit;
+}
+
 // ── Global button override: white bg, black border, black text ──
 // Excludes mat-icon-button (back arrows, icon-only buttons)
 .mdc-button,

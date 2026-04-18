@@ -1,17 +1,13 @@
 import { Component, DestroyRef, inject, signal } from '@angular/core';
-import { Router } from '@angular/router';
+import { Location } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
-import { MatDividerModule } from '@angular/material/divider';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { NavbarComponent } from '../../shared/components/navbar/navbar.component';
+import { SubscriptionCardComponent } from '../../shared/components/subscription-card/subscription-card.component';
 import { UserService } from '../../core/services/user.service';
-import { AuthService } from '../../core/services/auth.service';
 import { SubscriptionService } from '../../core/services/subscription.service';
 import { UserResponse } from '../../core/models';
 
@@ -20,23 +16,19 @@ import { UserResponse } from '../../core/models';
   standalone: true,
   imports: [
     ReactiveFormsModule,
-    MatCardModule,
     MatButtonModule,
-    MatFormFieldModule,
-    MatInputModule,
     MatIconModule,
-    MatDividerModule,
     MatProgressSpinnerModule,
     NavbarComponent,
+    SubscriptionCardComponent,
   ],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.scss',
 })
 export class ProfileComponent {
   private fb = inject(FormBuilder);
-  private router = inject(Router);
+  private location = inject(Location);
   private userService = inject(UserService);
-  private authService = inject(AuthService);
   private subscriptionService = inject(SubscriptionService);
   private destroyRef = inject(DestroyRef);
 
@@ -61,15 +53,15 @@ export class ProfileComponent {
       .subscribe({
         next: (user) => {
           this.user.set(user);
-          this.form.patchValue({
-            username: user.displayName,
-            email: user.email,
-            password: '',
-          });
+          this.form.patchValue({ username: user.displayName, email: user.email, password: '' });
           this.loading.set(false);
         },
         error: () => this.loading.set(false),
       });
+  }
+
+  goBack(): void {
+    this.location.back();
   }
 
   save(): void {
@@ -86,7 +78,7 @@ export class ProfileComponent {
       .subscribe({
         next: (user) => {
           this.user.set(user);
-          this.successMessage.set('Profil mis à jour avec succès');
+          this.successMessage.set('Profil mis à jour');
           this.saving.set(false);
         },
         error: () => this.saving.set(false),
@@ -97,14 +89,5 @@ export class ProfileComponent {
     this.subscriptionService.unsubscribe(subscriptionId)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe(() => this.loadUser());
-  }
-
-  logout(): void {
-    this.authService.logout();
-    this.router.navigate(['/']);
-  }
-
-  goBack(): void {
-    this.router.navigate(['/feed']);
   }
 }

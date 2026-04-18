@@ -1,8 +1,8 @@
 import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
+import { Location } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -19,7 +19,6 @@ import { TopicResponse } from '../../core/models';
   standalone: true,
   imports: [
     ReactiveFormsModule,
-    MatCardModule,
     MatButtonModule,
     MatFormFieldModule,
     MatInputModule,
@@ -34,6 +33,7 @@ import { TopicResponse } from '../../core/models';
 export class CreatePostComponent {
   private fb = inject(FormBuilder);
   private router = inject(Router);
+  private location = inject(Location);
   private topicService = inject(TopicService);
   private postService = inject(PostService);
   private destroyRef = inject(DestroyRef);
@@ -54,7 +54,7 @@ export class CreatePostComponent {
   }
 
   goBack(): void {
-    this.router.navigate(['/feed']);
+    this.location.back();
   }
 
   submit(): void {

@@ -1,34 +1,26 @@
 <app-navbar />
 
 <div class="topics-page">
-  <h1>Thèmes</h1>
-
   @if (loading()) {
     <div class="loading-container">
       <mat-spinner diameter="48" />
     </div>
   } @else {
-    <div class="topics-grid">
+    <div class="topics-list">
       @for (topic of topics(); track topic.id) {
-        <mat-card class="topic-card">
-          <mat-card-header>
-            <mat-card-title>{{ topic.title }}</mat-card-title>
-          </mat-card-header>
-          <mat-card-content>
-            <p class="description">{{ topic.description }}</p>
-          </mat-card-content>
-          <mat-card-actions>
-            @if (isSubscribed(topic.id)) {
-              <button mat-stroked-button color="warn" (click)="unsubscribe(topic.id)">
-                Se désabonner
-              </button>
-            } @else {
-              <button mat-raised-button color="primary" (click)="subscribe(topic.id)">
-                S'abonner
-              </button>
-            }
-          </mat-card-actions>
-        </mat-card>
+        <div class="topic-card">
+          <h3 class="topic-title">{{ topic.title }}</h3>
+          <p class="topic-description">{{ topic.description }}</p>
+          @if (isSubscribed(topic.id)) {
+            <button class="subscribe-btn subscribe-btn--done" (click)="unsubscribe(topic.id)">
+              Déjà abonné
+            </button>
+          } @else {
+            <button class="subscribe-btn" (click)="subscribe(topic.id)">
+              S'abonner
+            </button>
+          }
+        </div>
       }
     </div>
   }
