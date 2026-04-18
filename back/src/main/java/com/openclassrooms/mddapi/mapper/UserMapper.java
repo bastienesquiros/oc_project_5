@@ -6,8 +6,9 @@ import com.openclassrooms.mddapi.entity.User;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
+import org.mapstruct.ReportingPolicy;
 
-@Mapper(componentModel = "spring", uses = SubscriptionMapper.class)
+@Mapper(componentModel = "spring", uses = SubscriptionMapper.class, unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface UserMapper {
 
     UserResponseDto toDto(User user);

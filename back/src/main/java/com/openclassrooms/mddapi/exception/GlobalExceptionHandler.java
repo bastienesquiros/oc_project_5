@@ -16,18 +16,20 @@ import java.util.stream.Collectors;
 @Slf4j
 public class GlobalExceptionHandler {
 
+    private static final String ERROR_KEY = "error";
+
     @ExceptionHandler(ResourceNotFoundException.class)
     public ResponseEntity<Map<String, String>> handleNotFound(ResourceNotFoundException ex) {
         log.warn("Resource not found: {}", ex.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                .body(Map.of("error", ex.getMessage()));
+                .body(Map.of(ERROR_KEY, ex.getMessage()));
     }
 
     @ExceptionHandler(IllegalStateException.class)
     public ResponseEntity<Map<String, String>> handleConflict(IllegalStateException ex) {
         log.warn("Conflict: {}", ex.getMessage());
         return ResponseEntity.status(HttpStatus.CONFLICT)
-                .body(Map.of("error", ex.getMessage()));
+                .body(Map.of(ERROR_KEY, ex.getMessage()));
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -45,13 +47,13 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Map<String, String>> handleTypeMismatch(MethodArgumentTypeMismatchException ex) {
         String message = "Invalid value '%s' for parameter '%s'".formatted(ex.getValue(), ex.getName());
         log.warn("Type mismatch: {}", message);
-        return ResponseEntity.badRequest().body(Map.of("error", message));
+        return ResponseEntity.badRequest().body(Map.of(ERROR_KEY, message));
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Map<String, String>> handleUnexpected(Exception ex) {
         log.error("Unexpected error", ex);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(Map.of("error", "An unexpected error occurred"));
+                .body(Map.of(ERROR_KEY, "An unexpected error occurred"));
     }
 }

@@ -10,7 +10,7 @@ public record RegisterRequestDto(
         @NotBlank @Email String email,
         @NotBlank
         @Pattern(
-                regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>/?]).{8,}$",
+                regexp = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+\\-=\\[\\]{};':\"\\\\|,.<>/?]).{8,}$",
                 message = "Password must be at least 8 characters and contain a digit, lowercase, uppercase, and special character")
         String password) {
 }
