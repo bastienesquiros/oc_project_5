@@ -8,7 +8,7 @@ INSERT INTO topic (title, description, created, last_modified) VALUES
 
 -- ==================== USERS ====================
 -- Passwords are BCrypt of "Password1!" 
-INSERT INTO user (displayName, password, email, created, last_modified) VALUES
+INSERT INTO user (display_name, password, email, created, last_modified) VALUES
     ('alice',   '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'alice@example.com',   NOW(), NOW()),
     ('bob',     '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'bob@example.com',     NOW(), NOW()),
     ('charlie', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'charlie@example.com', NOW(), NOW());
