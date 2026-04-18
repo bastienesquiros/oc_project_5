@@ -36,9 +36,10 @@ class AuthServiceTest {
     @Test
     void login_withEmail_returnsToken() {
         User user = new User();
+        user.setId(1L);
         user.setEmail("alice@test.com");
         when(userRepository.findByEmail("alice@test.com")).thenReturn(Optional.of(user));
-        when(jwtService.generateToken("alice@test.com")).thenReturn("jwt-token");
+        when(jwtService.generateToken(any(Long.class))).thenReturn("jwt-token");
 
         AuthResponseDto result = authService.login(new LoginRequestDto("alice@test.com", "pass"));
 
@@ -49,10 +50,11 @@ class AuthServiceTest {
     @Test
     void login_withDisplayName_returnsToken() {
         User user = new User();
+        user.setId(1L);
         user.setEmail("alice@test.com");
         when(userRepository.findByEmail("alice")).thenReturn(Optional.empty());
         when(userRepository.findByDisplayName("alice")).thenReturn(Optional.of(user));
-        when(jwtService.generateToken("alice@test.com")).thenReturn("jwt-token");
+        when(jwtService.generateToken(any(Long.class))).thenReturn("jwt-token");
 
         AuthResponseDto result = authService.login(new LoginRequestDto("alice", "pass"));
 
@@ -73,7 +75,8 @@ class AuthServiceTest {
         when(userRepository.existsByEmail("alice@test.com")).thenReturn(false);
         when(userRepository.existsByDisplayName("alice")).thenReturn(false);
         when(passwordEncoder.encode("Password1!")).thenReturn("encoded");
-        when(jwtService.generateToken("alice@test.com")).thenReturn("jwt-token");
+        when(userRepository.save(any(User.class))).thenAnswer(inv -> { User u = inv.getArgument(0); u.setId(1L); return u; });
+        when(jwtService.generateToken(any(Long.class))).thenReturn("jwt-token");
 
         AuthResponseDto result = authService.register(
                 new RegisterRequestDto("alice", "alice@test.com", "Password1!"));

@@ -27,11 +27,10 @@ public class AuthService {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(dto.identifier(), dto.password()));
         log.info("User {} logged in", dto.identifier());
-        String email = userRepository.findByEmail(dto.identifier())
+        User user = userRepository.findByEmail(dto.identifier())
                 .or(() -> userRepository.findByDisplayName(dto.identifier()))
-                .orElseThrow()
-                .getEmail();
-        return new AuthResponseDto(jwtService.generateToken(email));
+                .orElseThrow();
+        return new AuthResponseDto(jwtService.generateToken(user.getId()));
     }
 
     public AuthResponseDto register(RegisterRequestDto dto) {
@@ -45,8 +44,8 @@ public class AuthService {
         user.setDisplayName(dto.username());
         user.setEmail(dto.email());
         user.setPassword(passwordEncoder.encode(dto.password()));
-        userRepository.save(user);
+        User saved = userRepository.save(user);
         log.info("New user registered: {}", dto.email());
-        return new AuthResponseDto(jwtService.generateToken(dto.email()));
+        return new AuthResponseDto(jwtService.generateToken(saved.getId()));
     }
 }
