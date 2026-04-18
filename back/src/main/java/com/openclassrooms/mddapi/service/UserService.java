@@ -3,14 +3,12 @@ package com.openclassrooms.mddapi.service;
 import com.openclassrooms.mddapi.dto.request.UserRequestDto;
 import com.openclassrooms.mddapi.dto.response.UserResponseDto;
 import com.openclassrooms.mddapi.entity.User;
-import com.openclassrooms.mddapi.exception.ResourceNotFoundException;
 import com.openclassrooms.mddapi.mapper.UserMapper;
 import com.openclassrooms.mddapi.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -19,32 +17,19 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final PasswordEncoder passwordEncoder;
 
-    public List<UserResponseDto> findAll() {
-        return userRepository.findAll().stream()
-                .map(userMapper::toDto)
-                .toList();
+    public UserResponseDto getMe(User user) {
+        return userMapper.toDto(user);
     }
 
-    public UserResponseDto findById(Long id) {
-        return userRepository.findById(id)
-                .map(userMapper::toDto)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
-    }
-
-    public UserResponseDto update(Long id, UserRequestDto dto) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + id));
-        log.info("Updating user {}", id);
+    public UserResponseDto updateMe(User user, UserRequestDto dto) {
+        log.info("Updating user {}", user.getId());
         userMapper.updateEntity(dto, user);
+        if (dto.password() != null && !dto.password().isBlank()) {
+            user.setPassword(passwordEncoder.encode(dto.password()));
+        }
         return userMapper.toDto(userRepository.save(user));
     }
-
-    public void delete(Long id) {
-        if (!userRepository.existsById(id)) {
-            throw new ResourceNotFoundException("User not found with id: " + id);
-        }
-        log.info("Deleting user {}", id);
-        userRepository.deleteById(id);
-    }
 }
+

@@ -5,6 +5,5 @@ import jakarta.validation.constraints.NotNull;
 
 public record CommentRequestDto(
         @NotBlank String content,
-        @NotNull Long postId,
-        @NotNull Long authorId) {
+        @NotNull Long postId) {
 }

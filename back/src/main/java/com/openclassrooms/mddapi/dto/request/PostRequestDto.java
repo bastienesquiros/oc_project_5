@@ -7,6 +7,5 @@ import jakarta.validation.constraints.Size;
 public record PostRequestDto(
         @NotBlank @Size(max = 50) String title,
         @NotBlank String content,
-        @NotNull Long topicId,
-        @NotNull Long authorId) {
+        @NotNull Long topicId) {
 }

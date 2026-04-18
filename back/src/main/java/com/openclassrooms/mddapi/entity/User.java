@@ -16,34 +16,52 @@ import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
-@Table(indexes = {
-        @Index(name = "idx_email", columnList = "email")
-})
+@Table(indexes = {@Index(name = "idx_email", columnList = "email")})
 @EntityListeners(AuditingEntityListener.class)
-public class User {
+public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(nullable = false)
     private Long id;
+
     @Column(unique = true, nullable = false, length = 25)
-    private String username;
+    private String displayName;
+
     @Column(nullable = false)
     private String password;
+
     @Column(unique = true, nullable = false)
     private String email;
+
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     private Set<Subscription> subscriptions = new HashSet<>();
+
     @CreatedDate
     private LocalDateTime created;
+
     @LastModifiedDate
     private LocalDateTime lastModified;
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return List.of();
+    }
 }

@@ -9,7 +9,7 @@ import org.mapstruct.Mapping;
 public interface PostMapper {
 
     @Mapping(source = "user.id", target = "authorId")
-    @Mapping(source = "user.username", target = "authorUsername")
+    @Mapping(source = "user.displayName", target = "authorUsername")
     @Mapping(source = "topic.id", target = "topicId")
     @Mapping(source = "topic.title", target = "topicTitle")
     PostResponseDto toDto(Post post);

@@ -9,7 +9,6 @@ import com.openclassrooms.mddapi.exception.ResourceNotFoundException;
 import com.openclassrooms.mddapi.mapper.CommentMapper;
 import com.openclassrooms.mddapi.repository.CommentRepository;
 import com.openclassrooms.mddapi.repository.PostRepository;
-import com.openclassrooms.mddapi.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -23,7 +22,6 @@ public class CommentService {
 
     private final CommentRepository commentRepository;
     private final PostRepository postRepository;
-    private final UserRepository userRepository;
     private final CommentMapper commentMapper;
 
     public Page<CommentResponseDto> findByPostId(Long postId, Pageable pageable) {
@@ -33,25 +31,14 @@ public class CommentService {
         return commentRepository.findByPostId(postId, pageable).map(commentMapper::toDto);
     }
 
-    public CommentResponseDto create(CommentRequestDto dto) {
+    public CommentResponseDto create(User author, CommentRequestDto dto) {
         Post post = postRepository.findById(dto.postId())
                 .orElseThrow(() -> new ResourceNotFoundException("Post not found with id: " + dto.postId()));
-        User author = userRepository.findById(dto.authorId())
-                .orElseThrow(() -> new ResourceNotFoundException("User not found with id: " + dto.authorId()));
-
-        log.info("User {} commenting on post {}", dto.authorId(), dto.postId());
+        log.info("User {} commenting on post {}", author.getId(), dto.postId());
         Comment comment = new Comment();
         comment.setContent(dto.content());
         comment.setPost(post);
         comment.setAuthor(author);
         return commentMapper.toDto(commentRepository.save(comment));
-    }
-
-    public void delete(Long id) {
-        if (!commentRepository.existsById(id)) {
-            throw new ResourceNotFoundException("Comment not found with id: " + id);
-        }
-        log.info("Deleting comment {}", id);
-        commentRepository.deleteById(id);
     }
 }

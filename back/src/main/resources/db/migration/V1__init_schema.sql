@@ -1,13 +1,13 @@
 CREATE TABLE user (
     id            BIGINT AUTO_INCREMENT NOT NULL,
-    username      VARCHAR(25)  NOT NULL,
+    display_name  VARCHAR(25)  NOT NULL,
     password      VARCHAR(255) NOT NULL,
     email         VARCHAR(255) NOT NULL,
     created       DATETIME,
     last_modified DATETIME,
     CONSTRAINT pk_user PRIMARY KEY (id),
-    CONSTRAINT uq_user_username UNIQUE (username),
-    CONSTRAINT uq_user_email    UNIQUE (email)
+    CONSTRAINT uq_user_display_name UNIQUE (display_name),
+    CONSTRAINT uq_user_email        UNIQUE (email)
 );
 
 CREATE INDEX idx_email ON user (email);
