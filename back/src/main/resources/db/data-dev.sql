@@ -7,11 +7,11 @@ INSERT INTO topics (title, description, created, last_modified) VALUES
     ('DevOps',     'CI/CD, Docker, Kubernetes, cloud et infrastructure.',         NOW(), NOW());
 
 -- ==================== USERS ====================
--- Passwords are BCrypt of "Password1!" 
+-- Passwords are BCrypt of "Password1!"
 INSERT INTO users (display_name, password, email, created, last_modified) VALUES
-    ('alice',   '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'alice@example.com',   NOW(), NOW()),
-    ('bob',     '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'bob@example.com',     NOW(), NOW()),
-    ('charlie', '$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'charlie@example.com', NOW(), NOW());
+    ('alice',   '$2b$10$AVT0x/FopxyX3UlHIxh.XOKDnS/vmNShXs0HU.zaTh0JUjAJQSsWq', 'alice@example.com',   NOW(), NOW()),
+    ('bob',     '$2b$10$AVT0x/FopxyX3UlHIxh.XOKDnS/vmNShXs0HU.zaTh0JUjAJQSsWq', 'bob@example.com',     NOW(), NOW()),
+    ('charlie', '$2b$10$AVT0x/FopxyX3UlHIxh.XOKDnS/vmNShXs0HU.zaTh0JUjAJQSsWq', 'charlie@example.com', NOW(), NOW());
 
 -- ==================== POSTS ====================
 INSERT INTO posts (title, content, user_id, topic_id, created, last_modified) VALUES
