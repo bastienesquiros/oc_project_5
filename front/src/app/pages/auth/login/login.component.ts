@@ -1,6 +1,5 @@
 import { Component, DestroyRef, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Location } from '@angular/common';
 import { Router, RouterLink } from '@angular/router';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -29,7 +28,6 @@ export class LoginComponent {
   private fb = inject(FormBuilder);
   private auth = inject(AuthService);
   private router = inject(Router);
-  private location = inject(Location);
   private destroyRef = inject(DestroyRef);
 
   form = this.fb.group({
@@ -41,7 +39,7 @@ export class LoginComponent {
   loading = signal(false);
 
   goBack(): void {
-    this.location.back();
+    this.router.navigate(['/']);
   }
 
   submit(): void {

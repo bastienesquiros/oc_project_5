@@ -28,7 +28,7 @@ describe('AuthService', () => {
   });
 
   it('login() should store token and set isAuthenticated to true', () => {
-    service.login({ identifier: 'alice@test.com', password: 'pass' }).subscribe();
+    service.login({ identifier: 'alice@test.com', password: 'Password1!' }).subscribe();
     const req = http.expectOne(`${environment.apiUrl}/auth/login`);
     req.flush({ token: 'jwt-token' });
     expect(service.isAuthenticated()).toBe(true);
@@ -36,14 +36,14 @@ describe('AuthService', () => {
   });
 
   it('register() should store token and set isAuthenticated to true', () => {
-    service.register({ username: 'alice', email: 'alice@test.com', password: 'pass' }).subscribe();
+    service.register({ username: 'alice', email: 'alice@test.com', password: 'Password1!' }).subscribe();
     const req = http.expectOne(`${environment.apiUrl}/auth/register`);
     req.flush({ token: 'jwt-token' });
     expect(service.isAuthenticated()).toBe(true);
   });
 
   it('logout() should clear token and set isAuthenticated to false', () => {
-    service.login({ identifier: 'alice@test.com', password: 'pass' }).subscribe();
+    service.login({ identifier: 'alice@test.com', password: 'Password1!' }).subscribe();
     http.expectOne(`${environment.apiUrl}/auth/login`).flush({ token: 'jwt-token' });
     service.logout();
     expect(service.isAuthenticated()).toBe(false);
@@ -51,7 +51,7 @@ describe('AuthService', () => {
   });
 
   it('getToken() should return stored token', () => {
-    service.login({ identifier: 'alice@test.com', password: 'pass' }).subscribe();
+    service.login({ identifier: 'alice@test.com', password: 'Password1!' }).subscribe();
     http.expectOne(`${environment.apiUrl}/auth/login`).flush({ token: 'my-token' });
     expect(service.getToken()).toBe('my-token');
   });

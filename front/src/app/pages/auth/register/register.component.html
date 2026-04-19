@@ -49,7 +49,7 @@
       }
 
       <div class="submit-wrapper">
-        <button type="submit" class="submit-btn" [disabled]="loading()">
+        <button type="submit" class="submit-btn" [disabled]="loading() || form.invalid">
           S'inscrire
         </button>
       </div>

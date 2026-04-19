@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Documentation et rapport du projet MDD</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      font-size: 11pt;
+      color: #1a1a1a;
+      background: #fff;
+      line-height: 1.6;
+    }
+
+    /* ── Cover page ── */
+    .cover {
+      page-break-after: always;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 60px;
+      border-bottom: 4px solid #3b5998;
+    }
+    .cover h1 {
+      font-size: 28pt;
+      color: #3b5998;
+      margin-bottom: 12px;
+      font-weight: 800;
+    }
+    .cover h2 {
+      font-size: 16pt;
+      color: #555;
+      font-weight: 400;
+      margin-bottom: 48px;
+    }
+    .cover .meta {
+      font-size: 11pt;
+      color: #444;
+      line-height: 2;
+      border: 1px solid #ddd;
+      padding: 20px 40px;
+      border-radius: 6px;
+      background: #f9f9f9;
+    }
+    .cover .meta strong { color: #3b5998; }
+
+    /* ── TOC ── */
+    .toc {
+      page-break-after: always;
+      padding: 60px 80px;
+    }
+    .toc h2 { font-size: 18pt; color: #3b5998; margin-bottom: 24px; border-bottom: 2px solid #3b5998; padding-bottom: 8px; }
+    .toc ol { padding-left: 20px; }
+    .toc li { margin: 8px 0; font-size: 11pt; }
+    .toc li a { color: #3b5998; text-decoration: none; }
+    .toc li ol { margin-top: 4px; }
+    .toc li ol li { font-size: 10.5pt; color: #555; }
+
+    /* ── Main content ── */
+    .content { padding: 40px 80px; }
+
+    h1.section-title {
+      font-size: 18pt;
+      color: #3b5998;
+      border-bottom: 2px solid #3b5998;
+      padding-bottom: 8px;
+      margin: 40px 0 20px;
+    }
+    h2.sub-title {
+      font-size: 13pt;
+      color: #2c2c2c;
+      margin: 28px 0 12px;
+      padding-left: 8px;
+      border-left: 4px solid #3b5998;
+    }
+    h3.sub-sub-title {
+      font-size: 11.5pt;
+      color: #444;
+      margin: 20px 0 8px;
+      font-weight: 600;
+    }
+
+    p { margin-bottom: 12px; }
+
+    ul, ol { padding-left: 22px; margin-bottom: 12px; }
+    li { margin-bottom: 5px; }
+
+    /* ── Tables ── */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0 24px;
+      font-size: 10pt;
+    }
+    thead tr { background: #3b5998; color: #fff; }
+    thead th { padding: 9px 12px; text-align: left; font-weight: 600; }
+    tbody tr:nth-child(even) { background: #f4f6fa; }
+    tbody td { padding: 8px 12px; border-bottom: 1px solid #dde1ea; vertical-align: top; }
+
+    /* ── Code ── */
+    pre, code {
+      font-family: 'Consolas', 'Courier New', monospace;
+      background: #f4f6fa;
+      border-radius: 4px;
+      font-size: 9.5pt;
+    }
+    pre { padding: 14px 18px; margin: 10px 0 18px; overflow-x: auto; border-left: 3px solid #3b5998; }
+    code { padding: 1px 5px; }
+
+    /* ── Callout boxes ── */
+    .callout {
+      background: #eef2ff;
+      border-left: 4px solid #3b5998;
+      padding: 12px 16px;
+      margin: 16px 0;
+      border-radius: 0 6px 6px 0;
+      font-size: 10.5pt;
+    }
+    .callout.warn { background: #fff8e1; border-color: #f6a800; }
+    .callout.success { background: #e8f5e9; border-color: #2e7d32; }
+
+    /* ── Status badges ── */
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-size: 9pt;
+      font-weight: 600;
+    }
+    .badge.done { background: #e8f5e9; color: #2e7d32; }
+    .badge.todo { background: #fff3e0; color: #e65100; }
+    .badge.progress { background: #e3f2fd; color: #1565c0; }
+
+    /* ── Images ── */
+    .img-block {
+      text-align: center;
+      margin: 20px 0;
+      page-break-inside: avoid;
+    }
+    .img-block img {
+      max-width: 100%;
+      border: 1px solid #dde1ea;
+      border-radius: 6px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .img-block .caption {
+      font-size: 9.5pt;
+      color: #777;
+      margin-top: 8px;
+      font-style: italic;
+    }
+    .img-row { display: flex; gap: 16px; }
+    .img-row .img-block { flex: 1; }
+
+    /* ── Page breaks ── */
+    .page-break { page-break-before: always; }
+
+    /* ── Print ── */
+    @media print {
+      body { font-size: 10.5pt; }
+      .cover { height: auto; min-height: 100vh; }
+      a { color: inherit; text-decoration: none; }
+      pre { white-space: pre-wrap; }
+    }
+
+    /* ── TODO marker ── */
+    .todo-marker {
+      background: #fff3cd;
+      border: 1px dashed #e6a817;
+      color: #7a4f00;
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-style: italic;
+      font-size: 10pt;
+      display: inline-block;
+    }
+  </style>
+</head>
+<body>
+
+<!-- ══════════════════ COVER ══════════════════ -->
+<div class="cover">
+  <h1>MDD — Monde de Dév</h1>
+  <h2>Documentation et rapport de projet</h2>
+  <div class="meta">
+    <div><strong>Auteur :</strong>Esquiros Bastien</div>
+    <div><strong>Version :</strong> 0.0.1</div>
+    <div><strong>Date :</strong>19/04/2026</div>
+    <div><strong>Formation :</strong> OpenClassrooms — Développeur Full Stack</div>
+  </div>
+</div>
+
+<!-- ══════════════════ TOC ══════════════════ -->
+<div class="toc">
+  <h2>Table des matières</h2>
+  <ol>
+    <li><a href="#s1">Présentation générale du projet</a>
+      <ol>
+        <li><a href="#s11">Objectifs du projet</a></li>
+        <li><a href="#s12">Périmètre fonctionnel</a></li>
+      </ol>
+    </li>
+    <li><a href="#s2">Architecture et conception technique</a>
+      <ol>
+        <li><a href="#s21">Schéma global de l'architecture</a></li>
+        <li><a href="#s22">Choix techniques</a></li>
+        <li><a href="#s23">API et schémas de données</a></li>
+      </ol>
+    </li>
+    <li><a href="#s3">Tests, performance et qualité</a>
+      <ol>
+        <li><a href="#s31">Stratégie de test</a></li>
+        <li><a href="#s32">Rapport de performance et optimisation</a></li>
+        <li><a href="#s33">Revue technique</a></li>
+      </ol>
+    </li>
+    <li><a href="#s4">Documentation utilisateur et supervision</a>
+      <ol>
+        <li><a href="#s41">FAQ utilisateur</a></li>
+        <li><a href="#s42">Supervision et tâches déléguées à l'IA</a></li>
+      </ol>
+    </li>
+    <li><a href="#s5">Annexes</a></li>
+  </ol>
+</div>
+
+<!-- ══════════════════ CONTENT ══════════════════ -->
+<div class="content">
+
+  <!-- ── 1 ── -->
+  <h1 class="section-title" id="s1">1. Présentation générale du projet</h1>
+
+  <h2 class="sub-title" id="s11">1.1 Objectifs du projet</h2>
+  <p>
+    MDD (Monde de Dév) est une application de réseau social orientée développeurs, réalisée dans le cadre du parcours
+    Full Stack d'OpenClassrooms. L'objectif est de proposer une plateforme permettant aux développeurs de partager
+    des articles techniques, de commenter les publications de leurs pairs et de s'organiser autour de thèmes (technologies,
+    langages, frameworks…).
+  </p>
+  <p>
+    Le projet répond à un besoin de <strong>centralisation des ressources techniques</strong> et de
+    <strong>création de communautés thématiques</strong> au sein d'une entreprise fictive souhaitant
+    renforcer la communication interne entre ses équipes techniques.
+  </p>
+  <p>
+    La valeur ajoutée attendue : un fil d'actualité personnalisé par abonnement, évitant le bruit informationnel,
+    et un espace de discussion structuré par article.
+  </p>
+
+  <h2 class="sub-title" id="s12">1.2 Périmètre fonctionnel</h2>
+  <table>
+    <thead>
+      <tr><th>Fonctionnalité</th><th>Description</th><th>Statut</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Inscription</td>
+        <td>Formulaire avec validation (username, email, mot de passe fort)</td>
+        <td><span class="badge done">✓ Terminée</span></td>
+      </tr>
+      <tr>
+        <td>Connexion</td>
+        <td>Authentification par email <em>ou</em> nom d'utilisateur + JWT</td>
+        <td><span class="badge done">✓ Terminée</span></td>
+      </tr>
+      <tr>
+        <td>Profil utilisateur</td>
+        <td>Consultation et modification (username, email, mot de passe)</td>
+        <td><span class="badge done">✓ Terminée</span></td>
+      </tr>
+      <tr>
+        <td>Abonnements aux thèmes</td>
+        <td>S'abonner / se désabonner à des thèmes techniques</td>
+        <td><span class="badge done">✓ Terminée</span></td>
+      </tr>
+      <tr>
+        <td>Fil d'actualité</td>
+        <td>Articles des thèmes suivis, triables chronologiquement</td>
+        <td><span class="badge done">✓ Terminée</span></td>
+      </tr>
+      <tr>
+        <td>Publication d'articles</td>
+        <td>Création d'un article lié à un thème</td>
+        <td><span class="badge done">✓ Terminée</span></td>
+      </tr>
+      <tr>
+        <td>Commentaires</td>
+        <td>Ajout de commentaires sur un article</td>
+        <td><span class="badge done">✓ Terminée</span></td>
+      </tr>
+      <tr>
+        <td>Rôles / administration</td>
+        <td>Rôle ADMIN, modération, back-office</td>
+        <td><span class="badge todo">Post-MVP</span></td>
+      </tr>
+      <tr>
+        <td>Refresh token</td>
+        <td>Rotation des JWT (access + refresh)</td>
+        <td><span class="badge todo">Post-MVP</span></td>
+      </tr>
+      <tr>
+        <td>Pagination frontend</td>
+        <td>Affichage paginé côté client</td>
+        <td><span class="badge todo">Post-MVP</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- ── 2 ── -->
+  <div class="page-break"></div>
+  <h1 class="section-title" id="s2">2. Architecture et conception technique</h1>
+
+  <h2 class="sub-title" id="s21">2.1 Schéma global de l'architecture</h2>
+  <p>L'application suit une architecture <strong>client-serveur découplée</strong> :</p>
+  <ul>
+    <li><strong>Frontend (Angular 21)</strong> : SPA servie sur <code>localhost:4200</code>, communique avec l'API via HTTP (Bearer JWT).</li>
+    <li><strong>Backend (Spring Boot 4)</strong> : API REST exposée sous le préfixe <code>/api</code> sur <code>localhost:8080</code>.</li>
+    <li><strong>Base de données (MySQL 8)</strong> : schéma géré par Flyway.</li>
+    <li><strong>Aucun service tiers externe</strong> dans le MVP.</li>
+  </ul>
+
+  <div class="img-block">
+    <img src="screenshots/schema_sql.png" alt="Schéma de la base de données" />
+    <div class="caption">Figure 1 — Schéma de la base de données (généré par Flyway)</div>
+  </div>
+
+  <div class="callout">
+    <strong>Organisation des dossiers :</strong><br>
+    <code>back/src/main/java/…</code> → packages par couche (controller, service, repository, mapper, model, dto, security)<br>
+    <code>front/src/app/</code> → pages, shared/components, core (services, models, interceptors, guards)
+  </div>
+
+  <h2 class="sub-title" id="s22">2.2 Choix techniques</h2>
+  <table>
+    <thead>
+      <tr><th>Élément</th><th>Type</th><th>Documentation</th><th>Objectif</th><th>Justification</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Angular 21</td>
+        <td>Framework front-end</td>
+        <td><a href="https://angular.dev">angular.dev</a></td>
+        <td>SPA réactive, routing, formulaires</td>
+        <td>Respect des standards du parcours OC ; support des Signals (Angular 16+)</td>
+      </tr>
+      <tr>
+        <td>Angular Material</td>
+        <td>UI Components</td>
+        <td><a href="https://material.angular.io">material.angular.io</a></td>
+        <td>Composants accessibles, cohérence visuelle</td>
+        <td>Productivité, accessibilité ARIA native</td>
+      </tr>
+      <tr>
+        <td>Spring Boot 4</td>
+        <td>Framework back-end</td>
+        <td><a href="https://spring.io/projects/spring-boot">spring.io</a></td>
+        <td>API REST robuste</td>
+        <td>Respect des standards du parcours OC</td>
+      </tr>
+      <tr>
+        <td>Spring Security + JJWT</td>
+        <td>Authentification</td>
+        <td><a href="https://docs.spring.io/spring-security">spring.io/security</a></td>
+        <td>Sécurisation stateless (JWT)</td>
+        <td>Pas de session serveur, scalable</td>
+      </tr>
+      <tr>
+        <td>MySQL 8 + Flyway</td>
+        <td>Base de données + migrations</td>
+        <td><a href="https://flywaydb.org">flywaydb.org</a></td>
+        <td>Persistance + versionning du schéma</td>
+        <td>Traçabilité des évolutions de schéma</td>
+      </tr>
+      <tr>
+        <td>MapStruct</td>
+        <td>Mapping objet</td>
+        <td><a href="https://mapstruct.org">mapstruct.org</a></td>
+        <td>Conversion Entity ↔ DTO sans boilerplate</td>
+        <td>Code généré à la compilation, performant</td>
+      </tr>
+      <tr>
+        <td>Jest + jest-preset-angular</td>
+        <td>Tests front-end</td>
+        <td><a href="https://jestjs.io">jestjs.io</a></td>
+        <td>Tests unitaires rapides</td>
+        <td>Plus rapide que Karma, meilleur support CI</td>
+      </tr>
+      <tr>
+        <td>JUnit 5 + Mockito</td>
+        <td>Tests back-end</td>
+        <td><a href="https://junit.org/junit5">junit.org</a></td>
+        <td>Tests unitaires et d'intégration</td>
+        <td>Standard de l'écosystème Spring</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2 class="sub-title" id="s23">2.3 API et schémas de données</h2>
+
+  <h3 class="sub-sub-title">Endpoints principaux</h3>
+  <table>
+    <thead>
+      <tr><th>Endpoint</th><th>Méthode</th><th>Auth</th><th>Description</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>/api/auth/register</code></td><td>POST</td><td>Non</td><td>Inscription — retourne un JWT</td></tr>
+      <tr><td><code>/api/auth/login</code></td><td>POST</td><td>Non</td><td>Connexion (email ou username) — retourne un JWT</td></tr>
+      <tr><td><code>/api/users/me</code></td><td>GET</td><td>Oui</td><td>Profil de l'utilisateur connecté</td></tr>
+      <tr><td><code>/api/users/me</code></td><td>PUT</td><td>Oui</td><td>Mise à jour du profil</td></tr>
+      <tr><td><code>/api/topics</code></td><td>GET</td><td>Oui</td><td>Liste de tous les thèmes</td></tr>
+      <tr><td><code>/api/subscriptions</code></td><td>POST</td><td>Oui</td><td>S'abonner à un thème</td></tr>
+      <tr><td><code>/api/subscriptions/{id}</code></td><td>DELETE</td><td>Oui</td><td>Se désabonner</td></tr>
+      <tr><td><code>/api/feed</code></td><td>GET</td><td>Oui</td><td>Fil d'actualité paginé</td></tr>
+      <tr><td><code>/api/posts</code></td><td>POST</td><td>Oui</td><td>Créer un article</td></tr>
+      <tr><td><code>/api/posts/{id}</code></td><td>GET</td><td>Oui</td><td>Détail d'un article</td></tr>
+      <tr><td><code>/api/posts/{id}/comments</code></td><td>GET</td><td>Oui</td><td>Commentaires d'un article</td></tr>
+      <tr><td><code>/api/posts/{id}/comments</code></td><td>POST</td><td>Oui</td><td>Ajouter un commentaire</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout">
+    La documentation complète de l'API (Swagger UI) est accessible en profil <code>dev</code> :
+    <code>http://localhost:8080/api/swagger-ui.html</code>
+  </div>
+
+  <h3 class="sub-sub-title">Exemple de requête/réponse — Connexion</h3>
+  <pre>POST /api/auth/login
+Content-Type: application/json
+
+{
+  "identifier": "alice@example.com",
+  "password": "Password1!"
+}
+
+→ 200 OK
+{
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+}</pre>
+
+  <h3 class="sub-sub-title">Schéma de données</h3>
+  <p>Les entités principales et leurs relations :</p>
+  <ul>
+    <li><strong>User</strong> (id, displayName, email, password, created) — 1 user → N subscriptions</li>
+    <li><strong>Topic</strong> (id, title, description, created) — 1 topic → N posts, N subscriptions</li>
+    <li><strong>Subscription</strong> (id, userId, topicId, created) — table de jonction User ↔ Topic</li>
+    <li><strong>Post</strong> (id, title, content, authorId, topicId, created, lastModified) — 1 post → N comments</li>
+    <li><strong>Comment</strong> (id, content, authorId, postId, created)</li>
+  </ul>
+
+  <!-- ── 3 ── -->
+  <div class="page-break"></div>
+  <h1 class="section-title" id="s3">3. Tests, performance et qualité</h1>
+
+  <h2 class="sub-title" id="s31">3.1 Stratégie de test</h2>
+
+  <h3 class="sub-sub-title">Backend — Tests unitaires (JUnit 5 + Mockito)</h3>
+  <table>
+    <thead>
+      <tr><th>Classe</th><th>Tests</th><th>Ce qui est testé</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>AuthServiceTest</code></td><td>6</td><td>Login email/username, mauvais mdp, register, doublons email/username</td></tr>
+      <tr><td><code>SubscriptionServiceTest</code></td><td>6</td><td>Déjà abonné, topic inconnu, subscribe, sub introuvable, non propriétaire, unsubscribe</td></tr>
+      <tr><td><code>PostServiceTest</code></td><td>4</td><td>findById trouvé/non trouvé, create topic inconnu, create succès</td></tr>
+    </tbody>
+  </table>
+
+  <h3 class="sub-sub-title">Backend — Tests d'intégration (MockMvc + H2 in-memory)</h3>
+  <table>
+    <thead>
+      <tr><th>Classe</th><th>Tests</th><th>Ce qui est testé</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>MddApiApplicationTests</code></td><td>1</td><td>Démarrage du contexte Spring</td></tr>
+      <tr><td><code>AuthControllerIntegrationTest</code></td><td>6</td><td>Register, login (email/username), mauvais mdp, token invalide, /me</td></tr>
+      <tr><td><code>FeedControllerIntegrationTest</code></td><td>2</td><td>Feed sans auth (401), feed authentifié (200)</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout">
+    Les tests d'intégration utilisent <strong>H2 en mode MySQL</strong> avec <code>create-drop</code>.
+    Flyway est désactivé en profil <code>test</code> (SQL MySQL-specific incompatible avec H2).
+  </div>
+
+  <h3 class="sub-sub-title">Frontend — Tests unitaires (Jest + @angular-builders/jest)</h3>
+  <table>
+    <thead>
+      <tr><th>Classe</th><th>Tests</th><th>Ce qui est testé</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>AppComponent</code></td><td>1</td><td>Initialisation du composant racine</td></tr>
+      <tr><td><code>HomeComponent</code></td><td>1</td><td>Rendu de la page d'accueil</td></tr>
+      <tr><td><code>FeedComponent</code></td><td>4</td><td>Chargement des posts, tri asc/desc</td></tr>
+      <tr><td><code>ProfileComponent</code></td><td>4</td><td>Chargement du profil, save(), unsubscribe()</td></tr>
+      <tr><td><code>TopicsComponent</code></td><td>5</td><td>Chargement, isSubscribed(), subscribe(), unsubscribe()</td></tr>
+      <tr><td><code>AuthService</code></td><td>6</td><td>Login, register, logout, getToken()</td></tr>
+      <tr><td><code>TopicService</code></td><td>3</td><td>getAll(), getById()</td></tr>
+      <tr><td><code>PostService</code></td><td>3</td><td>getById(), create(), getComments()</td></tr>
+    </tbody>
+  </table>
+
+  <h3 class="sub-sub-title">Frontend — Tests end-to-end (Cypress)</h3>
+  <p>En complément des tests unitaires, une suite de tests Cypress couvre les parcours utilisateur réels dans le navigateur : authentification (connexion, inscription, déconnexion), consultation du fil d'actualité, détail d'un article, commentaires, thèmes et profil. Ces tests s'exécutent contre l'application Angular servie localement et le backend réel, garantissant l'intégration complète de la chaîne.</p>
+
+  <div class="callout success">
+    <strong>Résultats globaux :</strong> 25 tests backend (0 échec) · 27 tests unitaires frontend (0 échec) · tests e2e Cypress (0 échec)
+  </div>
+
+  <h2 class="sub-title" id="s32">3.2 Rapport de performance et optimisation</h2>
+
+  <h3 class="sub-sub-title">Couverture backend (JaCoCo)</h3>
+  <div class="img-block">
+    <img src="screenshots/coverage_back.png" alt="Rapport de couverture backend" />
+    <div class="caption">Figure 2 — Rapport JaCoCo (mappers, DTOs et entités exclus)</div>
+  </div>
+
+  <h3 class="sub-sub-title">Couverture frontend (Jest)</h3>
+  <div class="img-block">
+    <img src="screenshots/coverage_front.png" alt="Rapport de couverture frontend" />
+    <div class="caption">Figure 3 — Rapport de couverture Jest</div>
+  </div>
+
+  <h3 class="sub-sub-title">Couverture e2e (Cypress — V8 native)</h3>
+  <p>Le coverage e2e est collecté via la <strong>V8 Coverage API</strong> de Chrome (<code>experimentalCoverage: true</code> dans la configuration Cypress), sans instrumentation du code source. Il reflète les lignes effectivement exécutées par le navigateur lors des scénarios de bout en bout.</p>
+  <div class="img-block">
+    <img src="screenshots/coverage_e2e.png" alt="Rapport de couverture e2e Cypress" />
+    <div class="caption">Figure 4 — Couverture e2e Cypress (V8)</div>
+  </div>
+
+  <h3 class="sub-sub-title">Autres optimisations appliquées</h3>
+  <ul>
+    <li><strong>Lazy loading des routes</strong> : chaque page Angular est chargée à la demande (<code>loadComponent</code>), réduisant le bundle initial.</li>
+    <li><strong>Intercepteur 401</strong> : les tokens expirés déclenchent un logout automatique, évitant des requêtes inutiles.</li>
+    <li><strong>Guard contre le double-clic</strong> (topics) : un signal <code>loadingTopics</code> bloque les requêtes concurrentes de subscribe/unsubscribe.</li>
+    <li><strong>Dirty check sur le profil</strong> : le formulaire de profil n'envoie une requête que si des champs ont été modifiés.</li>
+  </ul>
+
+  <div class="callout warn">
+    <strong>Point d'amélioration identifié :</strong> absence de cache utilisateur côté frontend.
+    Chaque composant (Profil, Thèmes) effectue un appel <code>GET /api/users/me</code> indépendant.
+    L'introduction de <strong>NgRx Store</strong> ou d'un service partagé permettrait d'éliminer ces appels redondants.
+  </div>
+
+  <h2 class="sub-title" id="s33">3.3 Revue technique</h2>
+
+  <h3 class="sub-sub-title">Points forts</h3>
+  <ul>
+    <li><strong>Architecture en couches claire</strong> : séparation Controller / Service / Repository / Mapper au backend.</li>
+    <li><strong>Authentification stateless</strong> : JWT sans état serveur, intercepteur Angular pour l'attachement automatique du token.</li>
+    <li><strong>Signals Angular</strong> : gestion réactive de l'état local sans RxJS complexe dans les composants.</li>
+    <li><strong>Accessibilité</strong> : attributs ARIA présents sur l'ensemble des composants interactifs (aria-label, role, aria-busy).</li>
+    <li><strong>Barrel files</strong> (<code>core/models/index.ts</code>) : imports simplifiés et cohérents.</li>
+    <li><strong>Migrations Flyway</strong> : évolution du schéma traçable et reproductible.</li>
+  </ul>
+
+  <h3 class="sub-sub-title">Points à améliorer</h3>
+  <ul>
+    <li><strong>Absence de refresh token</strong> : token de 24h — un token expiré déconnecte brutalement l'utilisateur.</li>
+    <li><strong>Changement de mot de passe</strong> : ne déconnecte pas automatiquement l'utilisateur ni ne renouvelle le JWT, créant un état potentiellement incohérent.</li>
+    <li><strong>Cache utilisateur manquant</strong> : appels <code>/me</code> multipliés à chaque navigation (voir point performance).</li>
+    <li><strong>Testcontainers non fonctionnel</strong> : les tests d'intégration utilisent H2 au lieu de MySQL réel, en raison d'une incompatibilité Docker 29.x / docker-java.</li>
+    <li><strong>Pagination frontend absente</strong> : tous les articles sont chargés en une seule requête.</li>
+  </ul>
+
+  <h3 class="sub-sub-title">Actions correctives appliquées (revue de code)</h3>
+  <ul>
+    <li>Intercepteur HTTP étendu pour catcher les <code>401</code> → <code>logout()</code> + redirection <code>/login</code>.</li>
+    <li>Validation <code>isNaN(id)</code> sur l'ID de route dans <code>PostDetailComponent</code>.</li>
+    <li>Guard <code>if (!form.dirty) return</code> dans <code>ProfileComponent.save()</code>.</li>
+    <li>Correction de 5 erreurs de lint (import inutilisé, regex, accessibilité ARIA overlay).</li>
+    <li>Suppression de la double initialisation du test environment Jest.</li>
+  </ul>
+
+  <!-- ── 4 ── -->
+  <div class="page-break"></div>
+  <h1 class="section-title" id="s4">4. Documentation utilisateur et supervision</h1>
+
+  <h2 class="sub-title" id="s41">4.1 FAQ utilisateur</h2>
+
+  <p><strong>Q : Comment créer un compte ?</strong><br>
+  R : Sur la page d'accueil, cliquez sur <em>S'inscrire</em>. Remplissez le formulaire avec un nom d'utilisateur, une adresse e-mail et un mot de passe (min. 8 caractères, 1 majuscule, 1 minuscule, 1 chiffre, 1 caractère spécial). Vous êtes connecté automatiquement à la validation.</p>
+
+  <p><strong>Q : Comment me connecter ?</strong><br>
+  R : Utilisez soit votre adresse e-mail, soit votre nom d'utilisateur, avec votre mot de passe.</p>
+
+  <p><strong>Q : Comment voir des articles dans mon fil ?</strong><br>
+  R : Rendez-vous dans la section <em>Thèmes</em> et abonnez-vous aux thèmes qui vous intéressent. Les articles de ces thèmes apparaîtront dans votre fil d'actualité.</p>
+
+  <p><strong>Q : Comment changer mon mot de passe ?</strong><br>
+  R : Allez dans <em>Profil</em>, saisissez un nouveau mot de passe dans le champ dédié et cliquez sur <em>Sauvegarder</em>. Notez que cette action ne vous déconnecte pas automatiquement des autres sessions actives.</p>
+
+  <p><strong>Q : Que faire si l'application ne charge pas ?</strong><br>
+  R : Rafraîchissez la page. Si le problème persiste, votre session a peut-être expiré — reconnectez-vous. Contactez le support si le problème dure.</p>
+
+  <p><strong>Q : Puis-je supprimer un article ou un commentaire ?</strong><br>
+  R : La suppression n'est pas disponible dans la version MVP actuelle. Elle sera gérée via un back-office administrateur dans une version future.</p>
+
+  <h2 class="sub-title" id="s42">4.2 Supervision et tâches déléguées à l'IA</h2>
+
+  <table>
+    <thead>
+      <tr><th>Tâche déléguée</th><th>Outil</th><th>Objectif</th><th>Vérification effectuée</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Génération de la documentation Javadoc et annotations Swagger (<code>@Operation</code>, <code>@Tag</code>)</td>
+        <td>GitHub Copilot</td>
+        <td>Gain de temps sur la documentation technique</td>
+        <td>Relecture et correction des descriptions métier incorrectes</td>
+      </tr>
+      <tr>
+        <td>Squelettes de classes (mappers MapStruct, DTOs, config Spring Security)</td>
+        <td>GitHub Copilot</td>
+        <td>Accélération du bootstrap du projet</td>
+        <td>Adaptation aux modèles réels, suppression des erreurs de mapping</td>
+      </tr>
+      <tr>
+        <td>Génération des tests unitaires Mockito et tests d'intégration MockMvc</td>
+        <td>GitHub Copilot</td>
+        <td>Couverture rapide des cas nominaux</td>
+        <td>Revue des assertions, ajout des cas limites manquants</td>
+      </tr>
+      <tr>
+        <td>Débogage incompatibilités Spring Boot 4 et migration Testcontainers → H2</td>
+        <td>GitHub Copilot</td>
+        <td>Résolution d'erreurs de configuration inédites</td>
+        <td>Tests manuels des solutions proposées avant intégration</td>
+      </tr>
+      <tr>
+        <td>Génération de la regex de validation du mot de passe</td>
+        <td>GitHub Copilot</td>
+        <td>Expression régulière complexe (8+ cars, maj, min, chiffre, spécial)</td>
+        <td>Tests unitaires de la regex sur cas valides et invalides</td>
+      </tr>
+      <tr>
+        <td>Rédaction de ce README et du présent rapport</td>
+        <td>GitHub Copilot</td>
+        <td>Documentation structurée du projet</td>
+        <td>Relecture complète, ajout des TODOs, adaptation au contexte réel</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- ── 5 ── -->
+  <div class="page-break"></div>
+  <h1 class="section-title" id="s5">5. Annexes</h1>
+
+  <h2 class="sub-title">5.1 Captures d'écran de l'interface</h2>
+  <div class="img-row">
+    <div class="img-block">
+      <img src="screenshots/ui_1.png" alt="UI — vue 1" />
+      <div class="caption">Figure 4 — Vue d'un article</div>
+    </div>
+    <div class="img-block">
+      <img src="screenshots/ui_2.png" alt="UI — vue 2" />
+      <div class="caption">Figure 5 — Vue articles</div>
+    </div>
+  </div>
+
+  <h2 class="sub-title">5.2 Analyse des besoins front-end</h2>
+
+  <h3 class="sub-sub-title">Page d'accueil (<code>/</code>)</h3>
+  <p>Point d'entrée de l'application pour les visiteurs non connectés. Elle présente le logo et deux boutons d'action (<em>Se connecter</em> / <em>S'inscrire</em>). Un guard redirige automatiquement les utilisateurs déjà authentifiés vers le fil d'actualité, évitant tout accès inutile à cette page.</p>
+
+  <h3 class="sub-sub-title">Connexion (<code>/login</code>)</h3>
+  <p>Formulaire de connexion acceptant un <strong>email ou un nom d'utilisateur</strong> accompagné d'un mot de passe. Le bouton de soumission est désactivé tant que le formulaire est invalide. En cas d'échec, un message d'erreur est affiché inline. Un bouton retour permet de revenir à l'accueil. Un utilisateur déjà connecté est redirigé vers <code>/feed</code>.</p>
+
+  <h3 class="sub-sub-title">Inscription (<code>/register</code>)</h3>
+  <p>Formulaire de création de compte exigeant un nom d'utilisateur, une adresse e-mail et un mot de passe respectant un pattern de complexité (min. 8 caractères, majuscule, chiffre, caractère spécial). La validation s'affiche en temps réel via les <code>mat-error</code> Angular Material. Le bouton est désactivé tant que le formulaire est invalide.</p>
+
+  <h3 class="sub-sub-title">Fil d'actualité (<code>/feed</code>)</h3>
+  <p>Page principale des utilisateurs connectés. Elle affiche la liste des articles publiés dans les thèmes auxquels l'utilisateur est abonné. Un bouton de tri permet d'inverser l'ordre chronologique (du plus récent au plus ancien et vice versa). Chaque carte d'article est cliquable et mène au détail. Un bouton flottant permet la création d'un nouvel article.</p>
+
+  <h3 class="sub-sub-title">Détail d'un article (<code>/posts/:id</code>)</h3>
+  <p>Affiche le titre, le contenu complet, les métadonnées (auteur, date, thème) et la liste des commentaires d'un article. Un formulaire en bas de page permet de soumettre un nouveau commentaire — le bouton d'envoi est désactivé tant que le champ est vide. Un bouton retour renvoie vers le fil d'actualité.</p>
+
+  <h3 class="sub-sub-title">Création d'article (<code>/posts/create</code>)</h3>
+  <p>Formulaire permettant de rédiger un nouvel article : choix du thème (parmi les thèmes disponibles), saisie du titre et du contenu. L'accès est protégé par un guard d'authentification.</p>
+
+  <h3 class="sub-sub-title">Thèmes (<code>/topics</code>)</h3>
+  <p>Liste tous les thèmes techniques disponibles sur la plateforme. Pour chaque thème, l'utilisateur peut s'abonner ou se désabonner. Un guard évite les requêtes concurrentes (double-clic). Les thèmes déjà suivis sont mis en évidence.</p>
+
+  <h3 class="sub-sub-title">Profil (<code>/profile</code>)</h3>
+  <p>Permet à l'utilisateur de consulter et modifier ses informations personnelles (nom d'utilisateur, adresse e-mail, mot de passe). Le bouton de sauvegarde n'est actif que si au moins un champ a été modifié (<code>form.dirty</code>). La page affiche également la liste des abonnements actifs avec la possibilité de se désabonner directement. Un message de succès confirme la mise à jour.</p>
+
+  <h2 class="sub-title">5.3 Définition des données</h2>
+  <h3 class="sub-sub-title">Règles de validation (backend)</h3>
+  <ul>
+    <li><strong>email</strong> : format RFC valide, unique en base.</li>
+    <li><strong>displayName</strong> : non vide, unique en base.</li>
+    <li><strong>password</strong> : min. 8 caractères, au moins 1 majuscule, 1 minuscule, 1 chiffre, 1 caractère spécial — stocké hashé (BCrypt).</li>
+    <li><strong>Post.title</strong> : max 50 caractères, non vide.</li>
+    <li><strong>Post.content</strong> : non vide.</li>
+    <li><strong>Comment.content</strong> : non vide.</li>
+  </ul>
+  <h3 class="sub-sub-title">Sécurisation</h3>
+  <ul>
+    <li>Tous les endpoints (sauf <code>/auth/**</code>) requièrent un Bearer JWT valide.</li>
+    <li>CORS configuré pour n'accepter que <code>http://localhost:4200</code>.</li>
+    <li>Swagger désactivé hors profil <code>dev</code>.</li>
+    <li>Secret JWT injecté via variable d'environnement (non versionné).</li>
+  </ul>
+
+  <h2 class="sub-title">5.4 Rapports de couverture et de tests</h2>
+  <div class="img-block">
+    <img src="screenshots/coverage_back.png" alt="Couverture backend" />
+    <div class="caption">Figure 6 — Couverture backend JaCoCo (25 tests, 0 échec)</div>
+  </div>
+  <div class="img-block">
+    <img src="screenshots/coverage_front.png" alt="Couverture frontend" />
+    <div class="caption">Figure 7 — Couverture frontend Jest (27 tests, 0 échec)</div>
+  </div>
+  <div class="img-block">
+    <img src="screenshots/coverage_e2e.png" alt="Couverture e2e Cypress" />
+    <div class="caption">Figure 8 — Couverture e2e Cypress V8 (0 échec)</div>
+  </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,11 @@
+{
+  "validUser": {
+    "identifier": "alice@example.com",
+    "password": "Password1!"
+  },
+  "newUser": {
+    "username": "testuser_e2e",
+    "email": "testuser_e2e@example.com",
+    "password": "Password1!"
+  }
+}

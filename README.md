@@ -239,7 +239,18 @@ Le frontend utilise **Jest** via `@angular-builders/jest` et `jest-preset-angula
 | `TopicService`            | 3     | getAll(), getById()                           |
 | `PostService`             | 3     | getById(), create(), getComments()            |
 
-#### Rapport de couverture
+#### Tests end-to-end (Cypress)
+
+| Suite                  | Scénarios couverts |
+|------------------------|--------------------|
+| Authentification       | Connexion (email/username), inscription, déconnexion, bouton retour, bouton désactivé si formulaire vide |
+| Page d'accueil         | Logo/boutons visibles, redirection login/register, redirection /feed si déjà connecté |
+| Fil d'actualité        | Affichage, tri, navigation vers un article, redirection si non authentifié |
+| Détail d'un article    | Titre/contenu, métadonnées, commentaires, soumission de commentaire, bouton retour |
+| Thèmes                 | Affichage des thèmes, abonnement, désabonnement |
+| Profil                 | Champs pré-remplis, sauvegarde désactivée si non modifié, message de succès, abonnements |
+
+#### Rapport de couverture (Jest)
 
 Générer le rapport :
 ```bash
@@ -251,6 +262,18 @@ npm run test:coverage
 ![Rapport de couverture frontend](screenshots/coverage_front.png)
 
 > **27 tests — 0 échec.**
+
+#### Rapport de couverture e2e (Cypress — V8)
+
+Le coverage e2e utilise la V8 Coverage API native de Chrome (`experimentalCoverage: true`), sans instrumentation du code source.
+
+```bash
+cd front
+npx cypress run --browser chrome
+# Rapport disponible après : npx nyc report --reporter=html
+```
+
+![Rapport de couverture e2e](screenshots/coverage_e2e.png)
 
 ---
 

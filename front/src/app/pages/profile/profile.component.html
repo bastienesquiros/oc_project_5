@@ -26,7 +26,7 @@
         <p class="success-msg" role="status">{{ successMessage() }}</p>
       }
 
-      <button class="save-btn" type="submit" [disabled]="saving()" [attr.aria-busy]="saving()">
+      <button class="save-btn" type="submit" [disabled]="saving() || !form.dirty" [attr.aria-busy]="saving()">
         @if (saving()) {
           <mat-progress-spinner diameter="20" mode="indeterminate" aria-label="Sauvegarde en cours" />
         } @else {

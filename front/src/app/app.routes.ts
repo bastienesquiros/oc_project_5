@@ -6,7 +6,7 @@ import { guestGuard } from './guards/guest.guard';
 import { AuthService } from './core/services/auth.service';
 
 export const routes: Routes = [
-  { path: '', component: HomeComponent },
+  { path: '', component: HomeComponent, canActivate: [guestGuard] },
   { path: 'login', loadComponent: () => import('./pages/auth/login/login.component').then(m => m.LoginComponent), canActivate: [guestGuard] },
   { path: 'register', loadComponent: () => import('./pages/auth/register/register.component').then(m => m.RegisterComponent), canActivate: [guestGuard] },
   { path: 'feed', loadComponent: () => import('./pages/feed/feed.component').then(m => m.FeedComponent), canActivate: [authGuard] },
