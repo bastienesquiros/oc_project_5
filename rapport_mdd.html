@@ -330,6 +330,11 @@
     <div class="caption">Figure 1 — Schéma de la base de données (généré par Flyway)</div>
   </div>
 
+  <div class="img-block">
+    <img src="screenshots/schema_architecture.png" alt="Schéma d'architecture: Frontend, API, BDD" />
+    <div class="caption">Figure — Schéma d'architecture : Frontend (Angular SPA) ↔ API Spring Boot ↔ MySQL</div>
+  </div>
+
   <div class="callout">
     <strong>Organisation des dossiers :</strong><br>
     <code>back/src/main/java/…</code> → packages par couche (controller, service, repository, mapper, model, dto, security)<br>
@@ -514,24 +519,7 @@ Content-Type: application/json
 
   <h2 class="sub-title" id="s32">3.2 Rapport de performance et optimisation</h2>
 
-  <h3 class="sub-sub-title">Couverture backend (JaCoCo)</h3>
-  <div class="img-block">
-    <img src="screenshots/coverage_back.png" alt="Rapport de couverture backend" />
-    <div class="caption">Figure 2 — Rapport JaCoCo (mappers, DTOs et entités exclus)</div>
-  </div>
-
-  <h3 class="sub-sub-title">Couverture frontend (Jest)</h3>
-  <div class="img-block">
-    <img src="screenshots/coverage_front.png" alt="Rapport de couverture frontend" />
-    <div class="caption">Figure 3 — Rapport de couverture Jest</div>
-  </div>
-
-  <h3 class="sub-sub-title">Couverture e2e (Cypress — V8 native)</h3>
-  <p>Le coverage e2e est collecté via la <strong>V8 Coverage API</strong> de Chrome (<code>experimentalCoverage: true</code> dans la configuration Cypress), sans instrumentation du code source. Il reflète les lignes effectivement exécutées par le navigateur lors des scénarios de bout en bout.</p>
-  <div class="img-block">
-    <img src="screenshots/coverage_e2e.png" alt="Rapport de couverture e2e Cypress" />
-    <div class="caption">Figure 4 — Couverture e2e Cypress (V8)</div>
-  </div>
+  <p>Les rapports de couverture et les détails des tests sont centralisés en section <a href="#">5.4</a> (Rapports de couverture et de tests).</p>
 
   <h3 class="sub-sub-title">Autres optimisations appliquées</h3>
   <ul>
@@ -546,6 +534,17 @@ Content-Type: application/json
     Chaque composant (Profil, Thèmes) effectue un appel <code>GET /api/users/me</code> indépendant.
     L'introduction de <strong>NgRx Store</strong> ou d'un service partagé permettrait d'éliminer ces appels redondants.
   </div>
+
+  <h3 class="sub-sub-title">Rapport Lighthouse — page "feed"</h3>
+  <div class="img-block">
+    <img src="screenshots/lighthouse_report.png" alt="Rapport Lighthouse - feed" />
+    <div class="caption">Figure — Rapport Lighthouse pour la page feed (extrait)</div>
+  </div>
+  <p>Résumé minimal : Performance 43 · Accessibilité 89 · Best Practices 100 · SEO 91 (voir capture ci‑dessus).</p>
+  <ul>
+    <li><strong>Accessibilité :</strong> ajouter des noms accessibles (aria-label / texte visuellement masqué) pour les boutons (e.g. <code>button.mdc-icon-button.side-close</code>) et des libellés/alt sur les liens/images (e.g. <code>a.avatar-link</code>). Ajouter une balise <code>&lt;main&gt;</code> pour fournir un landmark principal.</li>
+    <li><strong>Performance :</strong> réduire les ressources critiques : optimiser la livraison des images (redimensionner / utiliser srcset pour <code>/assets/logo_p6.png</code> — affiché 140×81 mais source 695×401, ~24.5 KiB à gagner) et ajuster <code>font-display: swap</code> ou <code>optional</code> pour les Google Fonts. Éviter les chaînes de requêtes critiques (network dependency chains).</li>
+  </ul>
 
   <h2 class="sub-title" id="s33">3.3 Revue technique</h2>
 
@@ -708,17 +707,58 @@ Content-Type: application/json
   </ul>
 
   <h2 class="sub-title">5.4 Rapports de couverture et de tests</h2>
+
+  <table>
+    <thead>
+      <tr><th>Classe</th><th>Tests</th><th>Ce qui est testé</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>MddApiApplicationTests</code></td><td>1</td><td>Démarrage du contexte Spring</td></tr>
+      <tr><td><code>AuthControllerIntegrationTest</code></td><td>6</td><td>Register, login (email/username), mauvais mdp, token invalide, /me</td></tr>
+      <tr><td><code>FeedControllerIntegrationTest</code></td><td>2</td><td>Feed sans auth (401), feed authentifié (200)</td></tr>
+    </tbody>
+  </table>
+
+  <div class="callout">
+    Les tests d'intégration utilisent <strong>H2 en mode MySQL</strong> avec <code>create-drop</code>.
+    Flyway est désactivé en profil <code>test</code> (SQL MySQL-specific incompatible avec H2).
+  </div>
+
+  <h3 class="sub-sub-title">Frontend — Tests unitaires (Jest + @angular-builders/jest)</h3>
+  <table>
+    <thead>
+      <tr><th>Classe</th><th>Tests</th><th>Ce qui est testé</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><code>AppComponent</code></td><td>1</td><td>Initialisation du composant racine</td></tr>
+      <tr><td><code>HomeComponent</code></td><td>1</td><td>Rendu de la page d'accueil</td></tr>
+      <tr><td><code>FeedComponent</code></td><td>4</td><td>Chargement des posts, tri asc/desc</td></tr>
+      <tr><td><code>ProfileComponent</code></td><td>4</td><td>Chargement du profil, save(), unsubscribe()</td></tr>
+      <tr><td><code>TopicsComponent</code></td><td>5</td><td>Chargement, isSubscribed(), subscribe(), unsubscribe()</td></tr>
+      <tr><td><code>AuthService</code></td><td>6</td><td>Login, register, logout, getToken()</td></tr>
+      <tr><td><code>TopicService</code></td><td>3</td><td>getAll(), getById()</td></tr>
+      <tr><td><code>PostService</code></td><td>3</td><td>getById(), create(), getComments()</td></tr>
+    </tbody>
+  </table>
+
+  <h3 class="sub-sub-title">Frontend — Tests end-to-end (Cypress)</h3>
+  <p>En complément des tests unitaires, une suite de tests Cypress couvre les parcours utilisateur réels dans le navigateur : authentification (connexion, inscription, déconnexion), consultation du fil d'actualité, détail d'un article, commentaires, thèmes et profil. Ces tests s'exécutent contre l'application Angular servie localement et le backend réel, garantissant l'intégration complète de la chaîne.</p>
+
+  <div class="callout success">
+    <strong>Résultats globaux :</strong> 25 tests backend (0 échec) · 27 tests unitaires frontend (0 échec) · tests e2e Cypress (0 échec)
+  </div>
+
   <div class="img-block">
     <img src="screenshots/coverage_back.png" alt="Couverture backend" />
-    <div class="caption">Figure 6 — Couverture backend JaCoCo (25 tests, 0 échec)</div>
+    <div class="caption">Figure — Couverture backend JaCoCo</div>
   </div>
   <div class="img-block">
     <img src="screenshots/coverage_front.png" alt="Couverture frontend" />
-    <div class="caption">Figure 7 — Couverture frontend Jest (27 tests, 0 échec)</div>
+    <div class="caption">Figure — Couverture frontend Jest</div>
   </div>
   <div class="img-block">
     <img src="screenshots/coverage_e2e.png" alt="Couverture e2e Cypress" />
-    <div class="caption">Figure 8 — Couverture e2e Cypress V8 (0 échec)</div>
+    <div class="caption">Figure — Couverture e2e Cypress (V8)</div>
   </div>
 
 </div>
